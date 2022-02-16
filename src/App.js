@@ -1,5 +1,7 @@
 import './App.css';
 
+import React, { useRef, useState } from 'react';
+
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';
@@ -26,6 +28,7 @@ const analytics = firebase.analytics();
 function App() {
 
   const [user] = useAuthState(auth);
+
 
   return (
     <div className="App">
@@ -65,13 +68,46 @@ function SignOut() {
 
 function HomePage() {
 
+  const messagesRef = firestore.collection('userStashes');
+
+  const [position, setPosition] = useState('');
+   
+  function getCurrentPosition() {
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        console.log(position);
+        setPosition(position);
+      },
+  
+      function(error) {
+        console.error("Error Code = " + error.code + " - " + error.message);
+        return(error);
+      }
+    );
+  }
+
+  const savePosition = async (e) => {
+    getCurrentPosition() 
+
+    const { uid, photoURL } = auth.currentUser;
+
+    await messagesRef.add({
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+      timestamp: position.timestamp,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      uid
+    })
+
+  }
+ 
+
   return (<>
     <div>
-      <h1>Signed In.</h1>
+      <button className="location" onClick={() => savePosition()}>Get Location</button>
     </div>
   </>)
 }
-
 
 
 export default App;
