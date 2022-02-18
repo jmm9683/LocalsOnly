@@ -12,7 +12,10 @@
   -  Filterable based on range
   -  Filterable based on category
 
-#### MVP 0.2 Alpha Socials
+#### MVP 0.2 Styling
+- Styling with Tailwind
+
+#### MVP 0.3 Alpha Socials
 - Add a display name
 - Shareable link for adding friends
   - Route asks friend to create account and/or add this person as a friend
