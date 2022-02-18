@@ -73,8 +73,7 @@ function HomePage() {
   const [showStashForm, setShowStashForm] = useState(false)
   const toggleStashForm = () => setShowStashForm(!showStashForm)
 
-  const messagesRef = firestore.collection('userStashes');
-
+  //POSTING DATA
   const [position, setPosition] = useState('');
   const [positionHash, setPositionHash] = useState('');
 
@@ -107,8 +106,8 @@ function HomePage() {
   const savePosition = async (e) => {
 
     const { uid } = auth.currentUser;
-
-    await messagesRef.add({
+    const userStashes = firestore.collection('stashes').doc(uid).collection('stashes');
+    await userStashes.add({
       latitude: position.coords.latitude,
       longitude: position.coords.longitude,
       positionHash: positionHash,
@@ -128,10 +127,90 @@ function HomePage() {
     toggleStashForm();
   }
 
+  //QUERYING
+   
+  const [query, setQuery] = useState(false);
+  useEffect(() => {
+    if (query) {
+      stashQuery();
+    }
+  }, [query]);
+
+  function getCurrentPositionQuery() {
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        setPosition(position);
+        setPositionHash(geofire.geohashForLocation([position.coords.latitude,position.coords.longitude]));
+        setQuery(true);
+      },
+      function(error) {
+        console.error("Error Code = " + error.code + " - " + error.message);
+        return(error);
+      }
+    );
+    
+  }
+
+  const stashQuery = async (e) => {
+    const { uid } = auth.currentUser;
+    const userStashes = firestore.collection('stashes').doc(uid).collection('stashes');
+    // Find Stasthes within 5mi (8.04672km)
+    const center = [position.coords.latitude,position.coords.longitude];
+    const radiusInM = 8.04672 * 1000;
+
+    // Each item in 'bounds' represents a startAt/endAt pair. We have to issue
+    // a separate query for each pair. There can be up to 9 pairs of bounds
+    // depending on overlap, but in most cases there are 4.
+    const bounds = geofire.geohashQueryBounds(center, radiusInM);
+    const promises = [];
+    for (const b of bounds) {
+      const q =userStashes.orderBy('positionHash')
+        .startAt(b[0])
+        .endAt(b[1]);
+      promises.push(q.get());
+    }
+    // Collect all the query results together into a single list
+    Promise.all(promises).then((snapshots) => {
+      const matchingDocs = [];
+
+      for (const snap of snapshots) {
+        for (const doc of snap.docs) {
+          const lat = doc.get('latitude');
+          const lng = doc.get('longitude');
+
+          // We have to filter out a few false positives due to GeoHash
+          // accuracy, but most will match
+          const distanceInKm = geofire.distanceBetween([lat, lng], center);
+          const distanceInM = distanceInKm * 1000;
+          if (distanceInM <= radiusInM) {
+            matchingDocs.push(doc);
+          }
+        }
+      }
+
+      return matchingDocs;
+    }).then((matchingDocs) => {
+      setQuery(false);
+      for (const doc of matchingDocs){
+        console.log(doc.get('latitude'));
+      }
+    });
+  }
+
+  function getStashes(e) {
+    getCurrentPositionQuery()
+  }
+
   return (<>
     <div>
-      { !showStashForm ? <button className="location" onClick={toggleStashForm}>Get Location</button> : null }
-      { showStashForm ? 
+      { !showStashForm ? 
+        <div>
+          <button className="stashes" onClick={getStashes}>Stashes</button>
+          <button className="location" onClick={toggleStashForm}>Get Location</button>
+        </div> 
+
+        : 
+        
         <div>
             <div id="stashForm" className="stashForm-container">
               <form onSubmit={postStash}  onChange={() => {}}>
@@ -155,8 +234,7 @@ function HomePage() {
                 </form>
             </div>
             <button className="location" onClick={toggleStashForm}>Cancel</button> 
-        </div> 
-      : null }
+        </div>  }
     </div>
   </>)
 }
