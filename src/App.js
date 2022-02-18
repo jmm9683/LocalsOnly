@@ -128,7 +128,7 @@ function HomePage() {
   }
 
   //QUERYING
-   
+  const [range, setRange] = useState(3.21869);
   const [query, setQuery] = useState(false);
   useEffect(() => {
     if (query) {
@@ -156,7 +156,7 @@ function HomePage() {
     const userStashes = firestore.collection('stashes').doc(uid).collection('stashes');
     // Find Stasthes within 5mi (8.04672km)
     const center = [position.coords.latitude,position.coords.longitude];
-    const radiusInM = 8.04672 * 1000;
+    const radiusInM = range * 1000;
 
     // Each item in 'bounds' represents a startAt/endAt pair. We have to issue
     // a separate query for each pair. There can be up to 9 pairs of bounds
@@ -205,7 +205,14 @@ function HomePage() {
     <div>
       { !showStashForm ? 
         <div>
+          <select value={range} onChange={(e) => setRange(e.target.value)}>
+            <option value="3.21869">2mi</option>
+            <option value="8.04672">5mi</option>
+            <option value="16.0934">10mi</option>
+          </select>
+          <br/>
           <button className="stashes" onClick={getStashes}>Stashes</button>
+          <br/>
           <button className="location" onClick={toggleStashForm}>Get Location</button>
         </div> 
 
