@@ -33,15 +33,18 @@ function App() {
 
 
   return (
-    <div className="App">
-       <header>
-        <SignOut />
-      </header>
-
-      <section>
-        {user ? <HomePage /> : <SignIn />}
-      </section>
-
+    <div className="App min-h-screen bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800
+       py-6 flex flex-col justify-center relative overflow-hidden sm:py-12">
+      <div className="absolute inset-0 bg-[url(img/grid.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+      <div className="relative px-6 pt-5 pb-8 bg-white shadow-xl ring-1 ring-gray-900/5 max-w-lg mx-auto rounded-lg">
+        <header className="grid grid-cols-4 place-items-end">
+          <SignOut />
+        </header>
+        <section className="flex flex-col justify-center relative">
+          {user ? <HomePage /> : <SignIn />}
+        </section>
+      </div>
+       
     </div>
   );
 }
@@ -54,16 +57,18 @@ function SignIn() {
   }
 
   return (
-    <>
-      <button className="sign-in" onClick={signInWithGoogle}>Sign in with Google</button>
-    </>
+    <div>
+      <button className="sign-in bg-slate-500 hover:bg-slate-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white" onClick={signInWithGoogle}>Sign in with Google</button>
+    </div>
   )
 
 }
 
 function SignOut() {
   return auth.currentUser && (
-    <button className="sign-out" onClick={() => auth.signOut()}>Sign Out</button>
+    <div className="col-start-4">
+      <button className="sign-out bg-red-500 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"  onClick={() => auth.signOut()}>X</button>
+    </div>
   )
 }
 
@@ -211,9 +216,9 @@ function HomePage() {
             <option value="16.0934">10mi</option>
           </select>
           <br/>
-          <button className="stashes" onClick={getStashes}>Stashes</button>
+          <button className="stashes bg-green-500 hover:bg-green-700 px-5 py-2 text-sm leading-5 rounded-full font-semibold text-white" onClick={getStashes}>Stashes</button>
           <br/>
-          <button className="location" onClick={toggleStashForm}>Get Location</button>
+          <button className="location bg-amber-500 hover:bg-amber-700 px-5 py-2 text-sm leading-5 rounded-full font-semibold text-white" onClick={toggleStashForm}>Get Location</button>
         </div> 
 
         : 
@@ -221,26 +226,31 @@ function HomePage() {
         <div>
             <div id="stashForm" className="stashForm-container">
               <form onSubmit={postStash}  onChange={() => {}}>
-                  <label>
+                  <label className="text-3xl font-bold">
                     Describe Your Find:
                   </label>
+                  <br/>
                   <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+                  <br/>
                   <select value={category} onChange={(e) => setCategory(e.target.value)}>
                       <option value="any">Anything</option>
                       <option value="drink">Drink</option>
                       <option value="food">Food</option>
                       <option value="outdoors">Outdoors</option>
                     </select>
+                    <br/>
                   <textarea
                     rows="2.5"
                     cols="15"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   />
-                  <input type="submit" value="Submit"/>
+                  <br/>
+                  <input type="submit" className="bg-sky-500 hover:bg-sky-700 px-5 py-2 text-sm leading-5 rounded-full font-semibold text-white" value="Submit"/>
                 </form>
             </div>
-            <button className="location" onClick={toggleStashForm}>Cancel</button> 
+            <br/>
+            <button className="location bg-red-500 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white" onClick={toggleStashForm}>Cancel</button> 
         </div>  }
     </div>
   </>)
