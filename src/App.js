@@ -33,14 +33,14 @@ function App() {
 
 
   return (
-    <div className="App min-h-screen bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800
+    <div className="App min-h-screen bg-gradient-to-r from-slate-400 via-slate-300 to-slate-400
        py-6 flex flex-col justify-center relative overflow-hidden sm:py-12">
       <div className="absolute inset-0 bg-[url(img/grid.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
-      <div className="relative px-6 pt-5 pb-8 bg-white shadow-xl ring-1 ring-gray-900/5 max-w-lg mx-auto rounded-lg">
+      <div className="relative px-6 pt-5 pb-8 mx-auto">
         <header className="grid grid-cols-4 place-items-end">
           <SignOut />
         </header>
-        <section className="flex flex-col justify-center relative">
+        <section>
           {user ? <HomePage /> : <SignIn />}
         </section>
       </div>
@@ -58,7 +58,7 @@ function SignIn() {
 
   return (
     <div>
-      <button className="sign-in bg-slate-500 hover:bg-slate-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white" onClick={signInWithGoogle}>Sign in with Google</button>
+      <button className="sign-in bg-green-700 hover:bg-green-900 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white" onClick={signInWithGoogle}>Sign in with Google</button>
     </div>
   )
 
@@ -67,7 +67,7 @@ function SignIn() {
 function SignOut() {
   return auth.currentUser && (
     <div className="col-start-4">
-      <button className="sign-out bg-red-500 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"  onClick={() => auth.signOut()}>X</button>
+      <button className="sign-out bg-red-500 hover:bg-red-700 rounded-md bg-[url(img/signout.svg)] h-6 w-6"  onClick={() => auth.signOut()}></button>
     </div>
   )
 }
@@ -209,48 +209,60 @@ function HomePage() {
   return (<>
     <div>
       { !showStashForm ? 
-        <div>
-          <select value={range} onChange={(e) => setRange(e.target.value)}>
+        <div className="grid gap-4 justify-items-center">
+          {/* <select value={range} onChange={(e) => setRange(e.target.value)}>
             <option value="3.21869">2mi</option>
             <option value="8.04672">5mi</option>
             <option value="16.0934">10mi</option>
           </select>
-          <br/>
-          <button className="stashes bg-green-500 hover:bg-green-700 px-5 py-2 text-sm leading-5 rounded-full font-semibold text-white" onClick={getStashes}>Stashes</button>
-          <br/>
-          <button className="location bg-amber-500 hover:bg-amber-700 px-5 py-2 text-sm leading-5 rounded-full font-semibold text-white" onClick={toggleStashForm}>Get Location</button>
+          <br/> */}
+          <button className="stashes bg-green-500 hover:bg-green-700 px-5 py-2 rounded-full bg-[url(img/radar.svg)] h-56 w-56" onClick={getStashes}></button>
+          
+          <button className="location bg-red-500 hover:bg-red-700 px-5 py-2 bg-[url(img/mark.svg)] rounded-full w-20 h-6" onClick={toggleStashForm}></button>
         </div> 
 
         : 
         
-        <div>
-            <div id="stashForm" className="stashForm-container">
-              <form onSubmit={postStash}  onChange={() => {}}>
-                  <label className="text-3xl font-bold">
-                    Describe Your Find:
-                  </label>
-                  <br/>
-                  <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-                  <br/>
-                  <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                      <option value="any">Anything</option>
-                      <option value="drink">Drink</option>
-                      <option value="food">Food</option>
-                      <option value="outdoors">Outdoors</option>
-                    </select>
-                    <br/>
-                  <textarea
-                    rows="2.5"
-                    cols="15"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                  <br/>
-                  <input type="submit" className="bg-sky-500 hover:bg-sky-700 px-5 py-2 text-sm leading-5 rounded-full font-semibold text-white" value="Submit"/>
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+            <div id="stashForm" className="stashForm-container bg-white bg-opacity-90 py-8 px-6 shadow rounded-lg sm:px-10">
+              <form className="mb-0 space-y-6" onSubmit={postStash}  onChange={() => {}}>
+                  <div>
+                    <label for="title" className="block text-sm font-medium text-gray-700">Stash Title</label>
+                    <div className="mt-1">
+                    <input type="text" id="title" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    </div>
+                  </div>
+                  <div>
+                    <label for="category-select" className="block text-sm font-medium text-gray-700">Stash Category</label>
+                    <div className="mt-1">
+                      <select name="category-select" id="category-select" className="" value={category} onChange={(e) => setCategory(e.target.value)}>
+                        <option value="any">Anything</option>
+                        <option value="drink">Drink</option>
+                        <option value="food">Food</option>
+                        <option value="outdoors">Outdoors</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="mt-1">
+                    <label for="description" className="block text-sm font-medium text-gray-700">Description</label>
+                      <textarea
+                        name="description" id="description"
+                        rows="2.5"
+                        cols="15"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500" value="Submit">Submit</button>
+                  </div>
                 </form>
             </div>
-            <br/>
+            <div class="grid gap-4 justify-items-center py-2">
             <button className="location bg-red-500 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white" onClick={toggleStashForm}>Cancel</button> 
+            </div>
         </div>  }
     </div>
   </>)
