@@ -13,7 +13,6 @@ function HomePage() {
   const toggleStashList = () => {
     setShowStashList(!showStashList);
     if (!showStashList) {
-      console.log("querying");
       //   getStashes();
     }
     setShowStashForm(false);
