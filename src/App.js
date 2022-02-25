@@ -16,7 +16,7 @@ function App() {
       className="App min-h-screen bg-gradient-to-r from-slate-400 via-slate-300 to-slate-400
        py-6 flex flex-col justify-center relative overflow-hidden sm:py-12"
     >
-      <div className="absolute inset-0 bg-[url(img/grid.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+      <div className="absolute inset-0 bg-[url(img/topograph.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
       <div className="relative px-6 pt-5 pb-8 mx-auto">
         <header className="grid grid-cols-4 place-items-end">
           <SignOut />
