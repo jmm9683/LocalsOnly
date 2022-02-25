@@ -2,6 +2,18 @@ import React, { useRef, useState, useEffect } from "react";
 import { firebaseAuth, firestore } from "./Firebase.js";
 
 const geofire = require("geofire-common");
+const people = [
+  {
+    name: "Jane Cooper",
+    title: "Regional Paradigm Technician",
+    department: "Optimization",
+    role: "Admin",
+    email: "jane.cooper@example.com",
+    image:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60",
+  },
+  // More people...
+];
 
 function HomePage() {
   const [showStashForm, setShowStashForm] = useState(false);
@@ -162,53 +174,159 @@ function HomePage() {
   if (!showStashForm && showStashList) {
     return (
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div
-          id="stashList"
-          className="stashForm-container bg-white bg-opacity-90 py-8 px-6 shadow rounded-lg sm:px-10"
-        >
-          <div className="max-w-sm w-full lg:max-w-full lg:flex">
-            <div className="bg-[url('img/bbq.jpeg')] h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"></div>
-            <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-              <div className="mb-8">
-                <p className="text-sm text-gray-600 flex items-center">
-                  <svg
-                    className="fill-current text-gray-500 w-3 h-3 mr-2"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
-                  </svg>
-                  Members only
-                </p>
-                <div className="text-gray-900 font-bold text-xl mb-2">
-                  Can coffee make you a better developer?
+        <div id="stashList" className="stashForm-container">
+          <div className="no-scrollbar flex flex-col container  mt-10 mx-auto w-full items-center h-96 overflow-auto">
+            <ul className="flex flex-col w-full">
+              <li className="flex flex-row mb-2 bg-slate-800 hover:bg-slate-700  bg-opacity-50 rounded-lg shadow">
+                <div className="select-none cursor-pointer flex flex-1 items-center p-4">
+                  <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                    <a href="#" className="block relative">
+                      <img className="bg-[url(img/propic.jpeg)] bg-cover mx-auto object-cover rounded-full h-10 w-10" />
+                    </a>
+                  </div>
+                  <div className="flex-1 pl-1 mr-16">
+                    <div className="font-medium text-white">Jake </div>
+                    <div className="text-gray-200 text-sm">Developer</div>
+                  </div>
+                  <div className="text-gray-200 text-xs">1.7 mi</div>
                 </div>
-                <p className="text-gray-700 text-base">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                  exercitationem praesentium nihil.
-                </p>
-              </div>
-              <div className="flex items-center">
-                <img
-                  className="w-10 h-10 rounded-full mr-4 bg-[url('img/bbq.jpeg')]"
-                  alt="Avatar of Jonathan Reinink"
-                />
-                <div className="text-sm">
-                  <p className="text-gray-900 leading-none">Jonathan Reinink</p>
-                  <p className="text-gray-600">Aug 18</p>
+              </li>
+              <li className="flex flex-row mb-2 bg-slate-800 hover:bg-slate-700  bg-opacity-50 rounded-lg shadow">
+                <div className="select-none cursor-pointer flex flex-1 items-center p-4">
+                  <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                    <a href="#" className="block relative">
+                      <img className="bg-[url(img/propic.jpeg)] bg-cover mx-auto object-cover rounded-full h-10 w-10" />
+                    </a>
+                  </div>
+                  <div className="flex-1 pl-1 mr-16">
+                    <div className="font-medium text-white"> Morrissey</div>
+                    <div className="text-gray-200 text-sm">Developer</div>
+                  </div>
+                  <div className="text-gray-200 text-xs">1.7 mi</div>
                 </div>
-              </div>
-            </div>
+              </li>
+              <li className="flex flex-row mb-2 bg-slate-800 hover:bg-slate-700  bg-opacity-50 rounded-lg shadow">
+                <div className="select-none cursor-pointer flex flex-1 items-center p-4">
+                  <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                    <a href="#" className="block relative">
+                      <img className="bg-[url(img/propic.jpeg)] bg-cover mx-auto object-cover rounded-full h-10 w-10" />
+                    </a>
+                  </div>
+                  <div className="flex-1 pl-1 mr-16">
+                    <div className="font-medium text-white">Jake Morrissey</div>
+                    <div className="text-gray-200 text-sm">Developer</div>
+                  </div>
+                  <div className="text-gray-200 text-xs">1.7 mi</div>
+                </div>
+              </li>
+              <li className="flex flex-row mb-2 bg-slate-800 hover:bg-slate-700  bg-opacity-50 rounded-lg shadow">
+                <div className="select-none cursor-pointer flex flex-1 items-center p-4">
+                  <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                    <a href="#" className="block relative">
+                      <img className="bg-[url(img/propic.jpeg)] bg-cover mx-auto object-cover rounded-full h-10 w-10" />
+                    </a>
+                  </div>
+                  <div className="flex-1 pl-1 mr-16">
+                    <div className="font-medium text-white">Jake Morrissey</div>
+                    <div className="text-gray-200 text-sm">Developer</div>
+                  </div>
+                  <div className="text-gray-200 text-xs">1.7 mi</div>
+                </div>
+              </li>
+              <li className="flex flex-row mb-2 bg-slate-800 hover:bg-slate-700  bg-opacity-50 rounded-lg shadow">
+                <div className="select-none cursor-pointer flex flex-1 items-center p-4">
+                  <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                    <a href="#" className="block relative">
+                      <img className="bg-[url(img/propic.jpeg)] bg-cover mx-auto object-cover rounded-full h-10 w-10" />
+                    </a>
+                  </div>
+                  <div className="flex-1 pl-1 mr-16">
+                    <div className="font-medium text-white">Jake Morrissey</div>
+                    <div className="text-gray-200 text-sm">Developer</div>
+                  </div>
+                  <div className="text-gray-200 text-xs">1.7 mi</div>
+                </div>
+              </li>
+              <li className="flex flex-row mb-2 bg-slate-800 hover:bg-slate-700  bg-opacity-50 rounded-lg shadow">
+                <div className="select-none cursor-pointer flex flex-1 items-center p-4">
+                  <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                    <a href="#" className="block relative">
+                      <img className="bg-[url(img/propic.jpeg)] bg-cover mx-auto object-cover rounded-full h-10 w-10" />
+                    </a>
+                  </div>
+                  <div className="flex-1 pl-1 mr-16">
+                    <div className="font-medium text-white">Jake Morrissey</div>
+                    <div className="text-gray-200 text-sm">Developer</div>
+                  </div>
+                  <div className="text-gray-200 text-xs">1.7 mi</div>
+                </div>
+              </li>
+              <li className="flex flex-row mb-2 bg-slate-800 hover:bg-slate-700  bg-opacity-50 rounded-lg shadow">
+                <div className="select-none cursor-pointer flex flex-1 items-center p-4">
+                  <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                    <a href="#" className="block relative">
+                      <img className="bg-[url(img/propic.jpeg)] bg-cover mx-auto object-cover rounded-full h-10 w-10" />
+                    </a>
+                  </div>
+                  <div className="flex-1 pl-1 mr-16">
+                    <div className="font-medium text-white">Jake Morrissey</div>
+                    <div className="text-gray-200 text-sm">Developer</div>
+                  </div>
+                  <div className="text-gray-200 text-xs">1.7 mi</div>
+                </div>
+              </li>
+              <li className="flex flex-row mb-2 bg-slate-800 hover:bg-slate-700  bg-opacity-50 rounded-lg shadow">
+                <div className="select-none cursor-pointer flex flex-1 items-center p-4">
+                  <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                    <a href="#" className="block relative">
+                      <img className="bg-[url(img/propic.jpeg)] bg-cover mx-auto object-cover rounded-full h-10 w-10" />
+                    </a>
+                  </div>
+                  <div className="flex-1 pl-1 mr-16">
+                    <div className="font-medium text-white">Jake Morrissey</div>
+                    <div className="text-gray-200 text-sm">Developer</div>
+                  </div>
+                  <div className="text-gray-200 text-xs">1.7 mi</div>
+                </div>
+              </li>
+              <li className="flex flex-row mb-2 bg-slate-800 hover:bg-slate-700  bg-opacity-50 rounded-lg shadow">
+                <div className="select-none cursor-pointer flex flex-1 items-center p-4">
+                  <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                    <a href="#" className="block relative">
+                      <img className="bg-[url(img/propic.jpeg)] bg-cover mx-auto object-cover rounded-full h-10 w-10" />
+                    </a>
+                  </div>
+                  <div className="flex-1 pl-1 mr-16">
+                    <div className="font-medium text-white">Jake Morrissey</div>
+                    <div className="text-gray-200 text-sm">Developer</div>
+                  </div>
+                  <div className="text-gray-200 text-xs">1.7 mi</div>
+                </div>
+              </li>
+              <li className="flex flex-row mb-2 bg-slate-800 hover:bg-slate-700 bg-opacity-50 rounded-lg shadow">
+                <div className="select-none cursor-pointer flex flex-1 items-center p-4">
+                  <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                    <a href="#" className="block relative">
+                      <img className="bg-[url(img/propic.jpeg)] bg-cover mx-auto object-cover rounded-full h-10 w-10" />
+                    </a>
+                  </div>
+                  <div className="flex-1 pl-1 mr-16">
+                    <div className="font-medium text-white">Jake Morrissey</div>
+                    <div className="text-gray-200 text-sm">Developer</div>
+                  </div>
+                  <div className="text-gray-200 text-xs">1.7 mi</div>
+                </div>
+              </li>
+            </ul>
           </div>
-        </div>
-        <div className="grid gap-4 justify-items-center py-2">
-          <button
-            className="location bg-red-500 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
-            onClick={toggleStashList}
-          >
-            Back
-          </button>
+          <div className="grid gap-4 justify-items-center py-2">
+            <button
+              className="location bg-red-500 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
+              onClick={toggleStashList}
+            >
+              Back
+            </button>
+          </div>
         </div>
       </div>
     );

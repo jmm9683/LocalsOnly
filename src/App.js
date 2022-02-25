@@ -13,7 +13,7 @@ function App() {
 
   return (
     <div
-      className="App min-h-screen bg-gradient-to-r from-slate-400 via-slate-300 to-slate-400
+      className="App min-h-screen bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800
        py-6 flex flex-col justify-center relative overflow-hidden sm:py-12"
     >
       <div className="absolute inset-0 bg-[url(img/topograph.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
