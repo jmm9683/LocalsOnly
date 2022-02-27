@@ -163,55 +163,64 @@ function HomePage() {
     return (
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div id="stashList" className="stashForm-container">
-          <div className="no-scrollbar fl ex flex-col container  mt-10 mx-auto w-full items-center h-96 overflow-auto">
-            <ul className="flex flex-col w-full">
-              {stashes.map(function (stash) {
-                console.log(stash.doc);
-                let googleMapsLink =
-                  "https://maps.google.com/?q=" +
-                  stash.doc.get("latitude") +
-                  "," +
-                  stash.doc.get("longitude");
-                return (
-                  <li className="flex flex-row mb-2 bg-slate-800 hover:bg-slate-700  bg-opacity-50 rounded-lg shadow">
-                    <div className="select-none cursor-pointer flex flex-1 items-center p-4">
-                      <a
-                        className="select-none cursor-pointer flex flex-1 items-center"
-                        href={googleMapsLink}
-                        target="_blank"
-                      >
-                        <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
-                          <div className="mx-auto h-10 w-10">
-                            <svg
-                              class="fill-green-700"
-                              viewBox="0 0 25 25"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                d="M12 3c2.131 0 4 1.73 4 3.702 0 2.05-1.714 4.941-4 8.561-2.286-3.62-4-6.511-4-8.561 0-1.972 1.869-3.702 4-3.702zm0-2c-3.148 0-6 2.553-6 5.702 0 3.148 2.602 6.907 6 12.298 3.398-5.391 6-9.15 6-12.298 0-3.149-2.851-5.702-6-5.702zm0 8c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zm12 14h-24l4-8h3.135c.385.641.798 1.309 1.232 2h-3.131l-2 4h17.527l-2-4h-3.131c.435-.691.848-1.359 1.232-2h3.136l4 8z"
-                              />
-                            </svg>
+          <div className="no-scrollbar flex flex-col container  mt-10 mx-auto w-full items-center h-96 overflow-auto">
+            {query ? (
+              <div className="text-white pt-32">
+                Searching for Nearby Stashes...
+              </div>
+            ) : (
+              <ul className="flex flex-col w-full">
+                {stashes.map(function (stash) {
+                  console.log(stash.doc);
+                  let googleMapsLink =
+                    "https://maps.google.com/?q=" +
+                    stash.doc.get("latitude") +
+                    "," +
+                    stash.doc.get("longitude");
+                  return (
+                    <li className="flex flex-row mb-2 bg-slate-800 hover:bg-slate-700  bg-opacity-50 rounded-lg shadow">
+                      <div className="select-none cursor-pointer flex flex-1 items-center p-4">
+                        <a
+                          className="select-none cursor-pointer flex flex-1 items-center"
+                          href={googleMapsLink}
+                          target="_blank"
+                        >
+                          <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                            <div className="mx-auto h-10 w-10">
+                              <svg
+                                class="fill-green-700"
+                                viewBox="0 0 25 25"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M12 3c2.131 0 4 1.73 4 3.702 0 2.05-1.714 4.941-4 8.561-2.286-3.62-4-6.511-4-8.561 0-1.972 1.869-3.702 4-3.702zm0-2c-3.148 0-6 2.553-6 5.702 0 3.148 2.602 6.907 6 12.298 3.398-5.391 6-9.15 6-12.298 0-3.149-2.851-5.702-6-5.702zm0 8c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zm12 14h-24l4-8h3.135c.385.641.798 1.309 1.232 2h-3.131l-2 4h17.527l-2-4h-3.131c.435-.691.848-1.359 1.232-2h3.136l4 8z"
+                                />
+                              </svg>
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex-1 pl-1 mr-16">
-                          <div className="font-medium text-white">
-                            {stash.doc.get("title")}
+                          <div className="flex-1 pl-1 mr-16">
+                            <div className="font-medium text-white">
+                              {stash.doc.get("title")}
+                            </div>
+                            <div className="text-gray-200 text-sm">
+                              {stash.doc.get("description")}
+                            </div>
                           </div>
-                          <div className="text-gray-200 text-sm">
-                            {stash.doc.get("description")}
+                          <div className="text-gray-200 text-xs">
+                            <div>
+                              {stash.doc.get("category")} - {stash.dist} miles
+                            </div>
+                            <div>Jake Morrissey</div>
                           </div>
-                        </div>
-                        <div className="text-gray-200 text-xs">
-                          {stash.doc.get("category")} - {stash.dist} miles
-                        </div>
-                      </a>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
+                        </a>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
           <div className="grid gap-4 justify-items-center py-2">
             <button
