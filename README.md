@@ -1,6 +1,9 @@
 # Locals Only
+
 ## _A platform to share your secret spots and stashes with the ones you trust_
-#### MVP 0.1 Adding && Searching Stashes
+
+#### MVP 0.1 Adding && Searching Stashes (COMPLETED)
+
 - Login with Google
 - Grab current location
 - Save location with user inputted field
@@ -8,21 +11,22 @@
   - Category
   - Title
   - Description
-- Search for nearby stashes
-  -  Filterable based on range
-  -  Filterable based on category
 
-#### MVP 0.2 Styling
+#### MVP 0.2 Styling (COMPLETED)
+
 - Styling with Tailwind
 
 #### MVP 0.3 Alpha Socials
-- Add a display name
+
+- Menu for logout, display name, following, followers, stashes
+  - change display name
+  - following to edit list
+  - followers to edit list
+  - stashes to edit list
 - Shareable link for adding friends
-  - Route asks friend to create account and/or add this person as a friend
-  - Link/friends permission is associated with an area that you want to share
-  - Added to follower/following list for user to be able to manager 
-- Private stashes
+  - User firebase dynamic links to automatic follow upon account creation or link open
 - Query your stashes and friends
+- Add a display name to stash list
 
   # Getting Started with Create React App
 

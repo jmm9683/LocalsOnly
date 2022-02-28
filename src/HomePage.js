@@ -79,7 +79,7 @@ function HomePage() {
   }
 
   //QUERYING
-  const [range, setRange] = useState(3.21869);
+  const [range, setRange] = useState(16.0934);
   const [query, setQuery] = useState(false);
   const [stashes, setStashes] = useState([]);
   useEffect(() => {
@@ -113,7 +113,7 @@ function HomePage() {
       .collection("stashes")
       .doc(uid)
       .collection("stashes");
-    // Find Stasthes within 5mi (8.04672km)
+    // Find Stasthes within 10mi (16.0934km)
     const center = [position.coords.latitude, position.coords.longitude];
     const radiusInM = range * 1000;
 
