@@ -1,12 +1,12 @@
 import "./App.css";
 
 import React from "react";
+import firebase from "firebase/compat/app";
 import { firebaseAuth } from "./Firebase.js";
 
-import HomePage from "./HomePage";
+import { Outlet } from "react-router-dom";
 
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 
 function App() {
   const [user] = useAuthState(firebaseAuth);
@@ -18,10 +18,10 @@ function App() {
     >
       <div className="absolute inset-0 bg-[url(img/topograph.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
       <div className="relative px-6 pt-5 pb-8 mx-auto">
-        <header className="grid grid-cols-4 place-items-end">
+        <header className="grid grid-cols-4 place-items-begin">
           <SignOut />
         </header>
-        <section>{user ? <HomePage /> : <SignIn />}</section>
+        <section>{user ? <Outlet /> : <SignIn />}</section>
       </div>
     </div>
   );
@@ -29,7 +29,7 @@ function App() {
 
 function SignIn() {
   const signInWithGoogle = () => {
-    const provider = new firebaseAuth.GoogleAuthProvider();
+    const provider = new firebase.auth.GoogleAuthProvider();
     firebaseAuth.signInWithPopup(provider);
   };
 
@@ -48,7 +48,7 @@ function SignIn() {
 function SignOut() {
   return (
     firebaseAuth.currentUser && (
-      <div className="col-start-4">
+      <div className="col-start-1">
         <button
           className="sign-out bg-red-500 hover:bg-red-700 rounded-md bg-[url(img/signout.svg)] h-6 w-6"
           onClick={() => firebaseAuth.signOut()}
