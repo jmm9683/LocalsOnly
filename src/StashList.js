@@ -96,11 +96,11 @@ function StashList({ search }) {
   };
 
   return (
-    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="mt-8 w-screen max-w-lg">
       <div id="stashList" className="stashForm-container">
         <div className="no-scrollbar flex flex-col container mt-10 mx-auto w-full items-center h-96 overflow-auto">
           {query ? (
-            <div className="text-white pt-32">
+            <div className="text-white pt-32 text-center">
               Searching for Nearby Stashes...
             </div>
           ) : (
@@ -108,7 +108,9 @@ function StashList({ search }) {
               {stashes.map(function (stash) {
                 if (stash.empty == true) {
                   return (
-                    <div className="text-white pt-32">No Nearby Stashes</div>
+                    <div className="text-white pt-32 text-center">
+                      No Nearby Stashes
+                    </div>
                   );
                 }
 

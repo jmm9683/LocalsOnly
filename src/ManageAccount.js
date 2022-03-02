@@ -25,74 +25,74 @@ function ManageAccount() {
     Tourists: [],
     Locals: [],
   });
-  useEffect(() => {
-    if (uid) {
-      const stashData = getUserStashes(uid);
-      stashData.then((value) => {
-        if (value.docs != undefined) {
-          let myStashes = [];
-          for (const doc of value.docs) {
-            const lat = doc.get("latitude");
-            const lng = doc.get("longitude");
-            const title = doc.get("title");
-            const category = doc.get("category");
-            const description = doc.get("description");
-            const googleMapsLink =
-              "https://maps.google.com/?q=" + lat + "," + lng;
-            myStashes.push({
-              lat: lat,
-              lng: lng,
-              title: title,
-              category: category,
-              description: description,
-              googleMapsLink: googleMapsLink,
-              disabled: false,
-              id: doc.id,
-            });
-          }
-          setData({ ...data, "My Stashes": myStashes });
-        }
-      });
-      const followerData = getFollowers(uid);
-      followerData.then((value) => {
-        if (value.docs != undefined) {
-          let myFollowers = [];
-          for (const doc of value.docs) {
-            const user = doc.get("uid");
-            const displayName = doc.get("displayName");
-            if (user && displayName) {
-              myFollowers.push({
-                uid: uid,
-                displayName: displayName,
-                disabled: false,
-                id: doc.id,
-              });
-            }
-          }
-          setData({ ...data, Tourists: myFollowers });
-        }
-      });
-      const followingData = getFollowing(uid);
-      followingData.then((value) => {
-        if (value.docs != undefined) {
-          let myFollowing = [];
-          for (const doc of value.docs) {
-            const user = doc.get("uid");
-            const displayName = doc.get("displayName");
-            if (user && displayName) {
-              myFollowing.push({
-                uid: uid,
-                displayName: displayName,
-                disabled: false,
-                id: doc.id,
-              });
-            }
-          }
-          setData({ ...data, Locals: myFollowing });
-        }
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (uid) {
+  //     const stashData = getUserStashes(uid);
+  //     stashData.then((value) => {
+  //       if (value.docs != undefined) {
+  //         let myStashes = [];
+  //         for (const doc of value.docs) {
+  //           const lat = doc.get("latitude");
+  //           const lng = doc.get("longitude");
+  //           const title = doc.get("title");
+  //           const category = doc.get("category");
+  //           const description = doc.get("description");
+  //           const googleMapsLink =
+  //             "https://maps.google.com/?q=" + lat + "," + lng;
+  //           myStashes.push({
+  //             lat: lat,
+  //             lng: lng,
+  //             title: title,
+  //             category: category,
+  //             description: description,
+  //             googleMapsLink: googleMapsLink,
+  //             disabled: false,
+  //             id: doc.id,
+  //           });
+  //         }
+  //         setData({ ...data, "My Stashes": myStashes });
+  //       }
+  //     });
+  //     const followerData = getFollowers(uid);
+  //     followerData.then((value) => {
+  //       if (value.docs != undefined) {
+  //         let myFollowers = [];
+  //         for (const doc of value.docs) {
+  //           const user = doc.get("uid");
+  //           const displayName = doc.get("displayName");
+  //           if (user && displayName) {
+  //             myFollowers.push({
+  //               uid: uid,
+  //               displayName: displayName,
+  //               disabled: false,
+  //               id: doc.id,
+  //             });
+  //           }
+  //         }
+  //         setData({ ...data, Tourists: myFollowers });
+  //       }
+  //     });
+  //     const followingData = getFollowing(uid);
+  //     followingData.then((value) => {
+  //       if (value.docs != undefined) {
+  //         let myFollowing = [];
+  //         for (const doc of value.docs) {
+  //           const user = doc.get("uid");
+  //           const displayName = doc.get("displayName");
+  //           if (user && displayName) {
+  //             myFollowing.push({
+  //               uid: uid,
+  //               displayName: displayName,
+  //               disabled: false,
+  //               id: doc.id,
+  //             });
+  //           }
+  //         }
+  //         setData({ ...data, Locals: myFollowing });
+  //       }
+  //     });
+  //   }
+  // }, []);
   function deleteStash(id) {
     const stashData = deleteUserStash(uid, id);
     stashData.then(() => {
@@ -106,20 +106,42 @@ function ManageAccount() {
     });
   }
   return (
-    <div className="mt-8 sm:mx-auto w-96">
-      <Switch
-        checked={sharingLink}
-        onChange={setSharingLink}
-        className={`${sharingLink ? "bg-teal-900" : "bg-teal-700"}
-          relative inline-flex flex-shrink-0 h-[38px] w-[74px] border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
-      >
-        <span className="sr-only">Use setting</span>
-        <span
-          aria-hidden="true"
-          className={`${sharingLink ? "translate-x-9" : "translate-x-0"}
-            pointer-events-none inline-block h-[34px] w-[34px] rounded-full bg-white shadow-lg transform ring-0 transition ease-in-out duration-200`}
+    <div className="mt-8 sm:mx-auto">
+      <div className="flex items-center justify-center gap-4 mb-4">
+        <label for="title" className="font-medium text-white flex-none">
+          Sharing Link:
+        </label>
+        <input
+          disabled={true}
+          type="text"
+          id="title"
+          name="title"
+          value="links"
+          className="bg-slate-700 text-white"
         />
-      </Switch>
+        <button
+          disabled={false}
+          className={`${
+            false ? "bg-slate-700" : "bg-slate-800 hover:bg-slate-700 "
+          }
+          px-5 py-2 text-sm leading-3 rounded-lg font-semibold text-white`}
+        >
+          Copy
+        </button>
+        <Switch
+          checked={sharingLink}
+          onChange={setSharingLink}
+          className={`${sharingLink ? "bg-green-500" : "bg-red-500"}
+          relative inline-flex flex-shrink-0 h-[26px] w-[50px] border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+        >
+          <span className="sr-only">Use setting</span>
+          <span
+            aria-hidden="true"
+            className={`${sharingLink ? "translate-x-6" : "translate-x-0"}
+            pointer-events-none inline-block h-[22px] w-[22px] rounded-full bg-white shadow-lg transform ring-0 transition ease-in-out duration-200`}
+          />
+        </Switch>
+      </div>
       <Tab.Group>
         <Tab.List className="flex p-1 space-x-1 bg-slate-900/20 rounded-xl">
           {Object.keys(data).map((data) => (
@@ -139,7 +161,7 @@ function ManageAccount() {
             </Tab>
           ))}
         </Tab.List>
-        <Tab.Panels className="mt-2 no-scrollbar h-80 overflow-auto container mx-auto flex flex-col">
+        <Tab.Panels className="mt-2 no-scrollbar h-80 overflow-auto container mx-auto flex flex-col w-screen max-w-lg">
           {Object.keys(data).map((key, idx) => (
             <Tab.Panel
               key={idx}
