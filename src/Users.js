@@ -29,6 +29,15 @@ export const getUserStashes = async function (uid) {
   return await userStashes.get();
 };
 
+export const deleteUserStash = async function (uid, id) {
+  const userStashes = firestore
+    .collection("stashes")
+    .doc(uid)
+    .collection("stashes")
+    .doc(`${id}`);
+  return await userStashes.delete();
+};
+
 export const getFollowers = async function (uid) {
   const followersCollection = firestore.collection("followers").doc(uid);
   return await followersCollection.get();
