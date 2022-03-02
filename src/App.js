@@ -8,8 +8,32 @@ import { Outlet } from "react-router-dom";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 
+import {
+  getCurrentUser,
+  setDisplayName,
+  getFollowers,
+  getFollowing,
+} from "./Users.js";
+
 function App() {
   const [user] = useAuthState(firebaseAuth);
+
+  // if (user) {
+  //   const userData = getCurrentUser(user.uid);
+  //   userData.then((value) => {
+  //     if (value.get("displayName") == undefined) {
+  //       setDisplayName(user.uid, user.displayName);
+  //     }
+  //   });
+  //   const followerData = getFollowers(user.uid);
+  //   followerData.then((value) => {
+  //     console.log(value);
+  //   });
+  //   const followingData = getFollowing(user.uid);
+  //   followingData.then((value) => {
+  //     console.log(value);
+  //   });
+  // }
 
   return (
     <div
@@ -21,7 +45,7 @@ function App() {
         <header className="grid grid-cols-4 place-items-begin">
           <SignOut />
         </header>
-        <section>{user ? <Outlet /> : <SignIn />}</section>
+        <section className="min-h-96">{user ? <Outlet /> : <SignIn />}</section>
       </div>
     </div>
   );

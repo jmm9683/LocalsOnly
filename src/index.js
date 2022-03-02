@@ -6,6 +6,7 @@ import App from "./App";
 import HomePage from "./HomePage";
 import StashList from "./StashList";
 import StashForm from "./StashForm";
+import ManageAccount from "./ManageAccount";
 
 const rootElement = document.getElementById("root");
 render(
@@ -15,6 +16,7 @@ render(
         <Route path="/" element={<HomePage />} />
         <Route path="stashes" element={<StashList search={true} />} />
         <Route path="add-stash" element={<StashForm />} />
+        <Route path="account" element={<ManageAccount />} />
       </Route>
     </Routes>
   </BrowserRouter>,

@@ -59,7 +59,7 @@ function StashForm() {
       uid,
     });
     setPosting(false);
-    navigate(-1);
+    navigate("/");
   };
 
   function postStash(e) {
@@ -71,7 +71,7 @@ function StashForm() {
     <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div
         id="stashForm"
-        className="stashForm-container bg-white bg-opacity-90 py-8 px-6 shadow rounded-lg sm:px-10"
+        className="stashForm-container bg-slate-800 bg-opacity-90 py-8 px-6 shadow rounded-lg sm:px-10"
       >
         <form
           className="mb-0 space-y-6"
@@ -79,10 +79,7 @@ function StashForm() {
           onChange={() => {}}
         >
           <div>
-            <label
-              for="title"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label for="title" className="block text-sm font-medium text-white">
               Stash Title
             </label>
             <div className="mt-1">
@@ -91,6 +88,7 @@ function StashForm() {
                 id="title"
                 name="title"
                 value={title}
+                className="bg-slate-700 text-white"
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
@@ -98,7 +96,7 @@ function StashForm() {
           <div>
             <label
               for="category-select"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-white"
             >
               Stash Category
             </label>
@@ -106,14 +104,22 @@ function StashForm() {
               <select
                 name="category-select"
                 id="category-select"
-                className=""
+                className="bg-slate-700 text-white"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               >
-                <option value="any">Anything</option>
-                <option value="drink">Drink</option>
-                <option value="food">Food</option>
-                <option value="outdoors">Outdoors</option>
+                <option className="text-white" value="any">
+                  Anything
+                </option>
+                <option className="text-white" value="drink">
+                  Drink
+                </option>
+                <option className="text-white" value="food">
+                  Food
+                </option>
+                <option className="text-white" value="outdoors">
+                  Outdoors
+                </option>
               </select>
             </div>
           </div>
@@ -121,7 +127,7 @@ function StashForm() {
             <div className="mt-1">
               <label
                 for="description"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-white"
               >
                 Description
               </label>
@@ -130,6 +136,7 @@ function StashForm() {
                 id="description"
                 rows="2.5"
                 cols="15"
+                className="bg-slate-700 text-white"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
