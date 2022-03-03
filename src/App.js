@@ -21,15 +21,16 @@ function App() {
   return (
     <div
       className="App min-h-screen bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800
-       py-6 flex flex-col relative overflow-hidden "
+       py-6 flex flex-row relative overflow-hidden "
     >
       <div className="absolute inset-0 bg-[url(img/topograph.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
-      <header className="relative grid grid-cols-4 place-items-begin mx-6">
+      <header className="relative place-items-begin px-6">
         <SignOut />
       </header>
-      <div className="relative flex items-center justify-center">
+      <div className="relative flex w-full items-center justify-center">
         <section className="min-h-96">{user ? <Outlet /> : <SignIn />}</section>
       </div>
+      <div className="px-9"></div>
     </div>
   );
 }
@@ -43,7 +44,7 @@ function SignIn() {
   return (
     <div>
       <button
-        className="sign-in mt-64 bg-green-700 hover:bg-green-900 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
+        className="sign-in bg-green-700 hover:bg-green-900 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
         onClick={signInWithGoogle}
       >
         Sign in with Google

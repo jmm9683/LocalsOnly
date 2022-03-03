@@ -106,7 +106,7 @@ function ManageAccount() {
     });
   }
   return (
-    <div className="mt-8 sm:mx-auto">
+    <div className="justify-items-center sm:mx-auto">
       <div className="flex items-center justify-center gap-4 mb-4">
         <label for="title" className="font-medium text-white flex-none">
           Sharing Link:

@@ -96,7 +96,7 @@ function StashList({ search }) {
   };
 
   return (
-    <div className="mt-8 w-screen max-w-lg">
+    <div className=" w-screen max-w-lg">
       <div id="stashList" className="stashForm-container">
         <div className="no-scrollbar flex flex-col container mt-10 mx-auto w-full items-center h-96 overflow-auto">
           {query ? (
