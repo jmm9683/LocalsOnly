@@ -68,7 +68,7 @@ function StashForm() {
   }
 
   return (
-    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="sm:mx-auto sm:w-full sm:max-w-md">
       <div
         id="stashForm"
         className="stashForm-container bg-slate-800 bg-opacity-90 py-8 px-6 shadow rounded-lg sm:px-10"
