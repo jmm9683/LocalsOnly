@@ -106,8 +106,8 @@ function ManageAccount() {
     });
   }
   return (
-    <div className="justify-items-center sm:mx-auto">
-      <div className="flex items-center justify-center gap-4 mb-4">
+    <div className="w-full">
+      <div className="flex items-center justify-center md:gap-4 mb-4">
         <label for="title" className="font-medium text-white flex-none">
           Sharing Link:
         </label>
@@ -161,7 +161,7 @@ function ManageAccount() {
             </Tab>
           ))}
         </Tab.List>
-        <Tab.Panels className="mt-2 no-scrollbar h-80 overflow-auto container mx-auto flex flex-col w-screen max-w-lg">
+        <Tab.Panels className="mt-2 no-scrollbar h-80 overflow-auto container mx-auto flex flex-col">
           {Object.keys(data).map((key, idx) => (
             <Tab.Panel
               key={idx}
