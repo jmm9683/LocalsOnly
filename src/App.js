@@ -18,6 +18,15 @@ import {
 function App() {
   const [user] = useAuthState(firebaseAuth);
 
+  // if (user) {
+  //   const userData = getCurrentUser(user.uid);
+  //   userData.then((value) => {
+  //     if (value.get("displayName") == undefined) {
+  //       setDisplayName(user.uid, user.displayName);
+  //     }
+  //   });
+  // }
+
   return (
     <div
       className="App min-h-screen bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800

@@ -19,7 +19,9 @@ function classNames(...classes) {
 
 function ManageAccount() {
   const { uid } = firebaseAuth.currentUser;
-  const [sharingLink, setSharingLink] = useState(false);
+  const [sharingOpen, setSharingOpen] = useState(false);
+  const [sharingLink, setSharingLink] = useState("Closed Account");
+  const [copyButtonText, setCopyButtonText] = useState("Copy");
   let [data, setData] = useState({
     "My Stashes": [],
     Tourists: [],
@@ -105,39 +107,56 @@ function ManageAccount() {
       setData({ ...data, "My Stashes": updatedStashes });
     });
   }
+
+  function copyShareLink() {
+    navigator.clipboard.writeText(sharingLink);
+    setCopyButtonText("Copied!");
+  }
+  function sharingToggle() {
+    setSharingOpen(!sharingOpen);
+    setCopyButtonText("Copy");
+  }
   return (
     <div className="w-full">
-      <div className="flex items-center justify-center md:gap-4 mb-4">
-        <label for="title" className="font-medium text-white flex-none">
+      <div className="flex items-center justify-center md:gap-4 mb-4 w-full">
+        {/* <label for="title" className="font-medium text-white flex-none">
           Sharing Link:
-        </label>
+        </label> */}
         <input
           disabled={true}
           type="text"
           id="title"
           name="title"
-          value="links"
+          value={sharingLink}
           className="bg-slate-700 text-white"
         />
         <button
-          disabled={false}
+          disabled={!sharingOpen}
           className={`${
-            false ? "bg-slate-700" : "bg-slate-800 hover:bg-slate-700 "
+            !sharingOpen
+              ? "bg-slate-700 text-slate-500"
+              : "bg-slate-800 hover:bg-slate-700 text-white"
           }
-          px-5 py-2 text-sm leading-3 rounded-lg font-semibold text-white`}
+          px-5 py-2 text-sm leading-3 rounded-lg font-semibold `}
+          onClick={() => {
+            copyShareLink();
+          }}
         >
-          Copy
+          {copyButtonText}
         </button>
+
         <Switch
-          checked={sharingLink}
-          onChange={setSharingLink}
-          className={`${sharingLink ? "bg-green-500" : "bg-red-500"}
+          checked={sharingOpen}
+          onChange={() => {
+            sharingToggle();
+          }}
+          className={`${sharingOpen ? "bg-green-500" : "bg-red-500"}
           relative inline-flex flex-shrink-0 h-[26px] w-[50px] border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
         >
           <span className="sr-only">Use setting</span>
           <span
             aria-hidden="true"
-            className={`${sharingLink ? "translate-x-6" : "translate-x-0"}
+            className={`${sharingOpen ? "translate-x-6" : "translate-x-0"}
             pointer-events-none inline-block h-[22px] w-[22px] rounded-full bg-white shadow-lg transform ring-0 transition ease-in-out duration-200`}
           />
         </Switch>
