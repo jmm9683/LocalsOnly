@@ -7,6 +7,8 @@ import { firebaseAuth, firestore } from "./Firebase.js";
 import {
   getCurrentUser,
   setDisplayName,
+  openAccountSharing,
+  closeAccountSharing,
   getUserStashes,
   deleteUserStash,
   getFollowers,
@@ -19,6 +21,7 @@ function classNames(...classes) {
 
 function ManageAccount() {
   const { uid } = firebaseAuth.currentUser;
+  const [userInfo, setUserInfo] = useState({});
   const [sharingOpen, setSharingOpen] = useState(false);
   const [sharingLink, setSharingLink] = useState("Closed Account");
   const [copyButtonText, setCopyButtonText] = useState("Copy");
@@ -27,74 +30,79 @@ function ManageAccount() {
     Tourists: [],
     Locals: [],
   });
-  // useEffect(() => {
-  //   if (uid) {
-  //     const stashData = getUserStashes(uid);
-  //     stashData.then((value) => {
-  //       if (value.docs != undefined) {
-  //         let myStashes = [];
-  //         for (const doc of value.docs) {
-  //           const lat = doc.get("latitude");
-  //           const lng = doc.get("longitude");
-  //           const title = doc.get("title");
-  //           const category = doc.get("category");
-  //           const description = doc.get("description");
-  //           const googleMapsLink =
-  //             "https://maps.google.com/?q=" + lat + "," + lng;
-  //           myStashes.push({
-  //             lat: lat,
-  //             lng: lng,
-  //             title: title,
-  //             category: category,
-  //             description: description,
-  //             googleMapsLink: googleMapsLink,
-  //             disabled: false,
-  //             id: doc.id,
-  //           });
-  //         }
-  //         setData({ ...data, "My Stashes": myStashes });
-  //       }
-  //     });
-  //     const followerData = getFollowers(uid);
-  //     followerData.then((value) => {
-  //       if (value.docs != undefined) {
-  //         let myFollowers = [];
-  //         for (const doc of value.docs) {
-  //           const user = doc.get("uid");
-  //           const displayName = doc.get("displayName");
-  //           if (user && displayName) {
-  //             myFollowers.push({
-  //               uid: uid,
-  //               displayName: displayName,
-  //               disabled: false,
-  //               id: doc.id,
-  //             });
-  //           }
-  //         }
-  //         setData({ ...data, Tourists: myFollowers });
-  //       }
-  //     });
-  //     const followingData = getFollowing(uid);
-  //     followingData.then((value) => {
-  //       if (value.docs != undefined) {
-  //         let myFollowing = [];
-  //         for (const doc of value.docs) {
-  //           const user = doc.get("uid");
-  //           const displayName = doc.get("displayName");
-  //           if (user && displayName) {
-  //             myFollowing.push({
-  //               uid: uid,
-  //               displayName: displayName,
-  //               disabled: false,
-  //               id: doc.id,
-  //             });
-  //           }
-  //         }
-  //         setData({ ...data, Locals: myFollowing });
-  //       }
-  //     });
-  //   }
-  // }, []);
+  useEffect(() => {
+    updateSharingInfo();
+  }, [userInfo]);
+  useEffect(() => {
+    if (uid) {
+      const stashData = getUserStashes(uid);
+      stashData.then((value) => {
+        if (value.docs != undefined) {
+          let myStashes = [];
+          for (const doc of value.docs) {
+            const lat = doc.get("latitude");
+            const lng = doc.get("longitude");
+            const title = doc.get("title");
+            const category = doc.get("category");
+            const description = doc.get("description");
+            const googleMapsLink =
+              "https://maps.google.com/?q=" + lat + "," + lng;
+            myStashes.push({
+              lat: lat,
+              lng: lng,
+              title: title,
+              category: category,
+              description: description,
+              googleMapsLink: googleMapsLink,
+              disabled: false,
+              id: doc.id,
+            });
+          }
+          setData({ ...data, "My Stashes": myStashes });
+        }
+      });
+      const followerData = getFollowers(uid);
+      followerData.then((value) => {
+        if (value.docs != undefined) {
+          let myFollowers = [];
+          for (const doc of value.docs) {
+            const user = doc.get("uid");
+            const displayName = doc.get("displayName");
+            if (user && displayName) {
+              myFollowers.push({
+                uid: uid,
+                displayName: displayName,
+                disabled: false,
+                id: doc.id,
+              });
+            }
+          }
+          setData({ ...data, Tourists: myFollowers });
+        }
+      });
+      const followingData = getFollowing(uid);
+      followingData.then((value) => {
+        if (value.docs != undefined) {
+          let myFollowing = [];
+          for (const doc of value.docs) {
+            const user = doc.get("uid");
+            const displayName = doc.get("displayName");
+            if (user && displayName) {
+              myFollowing.push({
+                uid: uid,
+                displayName: displayName,
+                disabled: false,
+                id: doc.id,
+              });
+            }
+          }
+          setData({ ...data, Locals: myFollowing });
+        }
+
+        setUserInfo(getCurrentUser());
+      });
+    }
+  }, []);
   function deleteStash(id) {
     const stashData = deleteUserStash(uid, id);
     stashData.then(() => {
@@ -113,29 +121,49 @@ function ManageAccount() {
     setCopyButtonText("Copied!");
   }
   function sharingToggle() {
+    if (!sharingOpen) {
+      //opening accoutn
+      openAccountSharing(uid).then(() => {
+        setUserInfo(getCurrentUser());
+        updateSharingInfo();
+      });
+    }
+    if (sharingOpen) {
+      //closing account
+      closeAccountSharing(uid, userInfo.sharingLink).then(() => {
+        setUserInfo(getCurrentUser());
+        updateSharingInfo();
+      });
+    }
     setSharingOpen(!sharingOpen);
     setCopyButtonText("Copy");
+  }
+  function updateSharingInfo() {
+    if (userInfo.sharingLink != false) {
+      setSharingLink(window.location.href + "/" + userInfo.sharingLink);
+      setSharingOpen(userInfo.sharingLinkFlag);
+    } else {
+      setSharingLink("Closed Account");
+      setSharingOpen(userInfo.sharingLinkFlag);
+    }
   }
   return (
     <div className="w-full">
       <div className="flex items-center justify-center md:gap-4 mb-4 w-full">
-        {/* <label for="title" className="font-medium text-white flex-none">
-          Sharing Link:
-        </label> */}
         <input
           disabled={true}
           type="text"
           id="title"
           name="title"
           value={sharingLink}
-          className="bg-slate-700 text-white"
+          className="bg-slate-700 text-white text-center"
         />
         <button
           disabled={!sharingOpen}
           className={`${
             !sharingOpen
-              ? "bg-slate-700 text-slate-500"
-              : "bg-slate-800 hover:bg-slate-700 text-white"
+              ? "bg-slate-700 text-slate-500 w-40"
+              : "bg-slate-800 hover:bg-slate-700 text-white w-40"
           }
           px-5 py-2 text-sm leading-3 rounded-lg font-semibold `}
           onClick={() => {

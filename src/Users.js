@@ -2,22 +2,63 @@ import React, { useState, useEffect } from "react";
 import firebase from "firebase/compat/app";
 import { firebaseAuth, firestore } from "./Firebase.js";
 
-let currentUser = {};
+let thisCurrentUser = {};
 
-export const getCurrentUser = async function (uid) {
+export const currentUser = async function (uid) {
   const userCollection = firestore.collection("users").doc(uid);
   return await userCollection.get();
 };
 
-export const thisCurrentUser = function () {
-  return currentUser;
+export const getCurrentUser = function () {
+  return thisCurrentUser;
+};
+export const setCurrentUser = function (
+  uid,
+  displayName,
+  sharingLinkFlag,
+  sharingLink
+) {
+  thisCurrentUser.uid = uid;
+  thisCurrentUser.displayName = displayName;
+  thisCurrentUser.sharingLinkFlag = sharingLinkFlag;
+  thisCurrentUser.sharingLink = sharingLink;
 };
 
 export const setDisplayName = async function (uid, displayName) {
-  currentUser.displayName = displayName;
-  const displayNameCollection = firestore.collection("users").doc(uid);
-  const currentDisplayName = await displayNameCollection.set({
+  thisCurrentUser.displayName = displayName;
+  const userCollection = firestore.collection("users").doc(uid);
+  const currentDisplayName = await userCollection.set({
     displayName: displayName,
+  });
+};
+
+export const openAccountSharing = async function (uid) {
+  const sharingLink = firestore.collection("sharingLink");
+  await sharingLink
+    .add({
+      uid: uid,
+    })
+    .then(async (value) => {
+      const userCollection = firestore.collection("users").doc(uid);
+      await userCollection.update({
+        sharingLinkFlag: true,
+        sharingLink: value.id,
+      });
+      thisCurrentUser.sharingLinkFlag = true;
+      thisCurrentUser.sharingLink = value.id;
+    });
+};
+
+export const closeAccountSharing = async function (uid, link) {
+  const sharingLink = firestore.collection("sharingLink").doc(link);
+  await sharingLink.delete().then(async (value) => {
+    const userCollection = firestore.collection("users").doc(uid);
+    await userCollection.update({
+      sharingLinkFlag: false,
+      sharingLink: false,
+    });
+    thisCurrentUser.sharingLinkFlag = false;
+    thisCurrentUser.sharingLink = false;
   });
 };
 

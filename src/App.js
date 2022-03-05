@@ -9,23 +9,34 @@ import { Outlet } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import {
-  getCurrentUser,
+  currentUser,
   setDisplayName,
   getFollowers,
   getFollowing,
+  setCurrentUser,
 } from "./Users.js";
 
 function App() {
   const [user] = useAuthState(firebaseAuth);
 
-  // if (user) {
-  //   const userData = getCurrentUser(user.uid);
-  //   userData.then((value) => {
-  //     if (value.get("displayName") == undefined) {
-  //       setDisplayName(user.uid, user.displayName);
-  //     }
-  //   });
-  // }
+  if (user) {
+    const userData = currentUser(user.uid);
+    userData.then((value) => {
+      if (value.get("displayName") == undefined) {
+        setDisplayName(user.uid, user.displayName);
+      }
+      if (value.get("sharingLink") != undefined) {
+        setCurrentUser(
+          user.uid,
+          user.displayName,
+          value.get("sharingLinkFlag"),
+          value.get("sharingLink")
+        );
+      } else {
+        setCurrentUser(user.uid, user.displayName, false, false);
+      }
+    });
+  }
 
   return (
     <div
@@ -36,7 +47,7 @@ function App() {
       <header className="relative place-items-begin pl-3 md:pl-6">
         <SignOut />
       </header>
-      <div className="relative flex w-full items-center justify-center">
+      <div className="relative flex w-full items-center justify-center mt-9 md:mt-0">
         <section className="min-h-96">{user ? <Outlet /> : <SignIn />}</section>
       </div>
       <div className="pr-9 md:pr-12"></div>
