@@ -12,6 +12,11 @@ export const currentUser = async function (uid) {
 export const getCurrentUser = function () {
   return thisCurrentUser;
 };
+
+export const getDisplayName = async function (uid) {
+  const userDisplayName = firestore.collection("displayName").doc(uid);
+  return await userDisplayName.get();
+};
 export const setCurrentUser = function (
   uid,
   displayName,
@@ -26,7 +31,7 @@ export const setCurrentUser = function (
 
 export const setDisplayName = async function (uid, displayName) {
   thisCurrentUser.displayName = displayName;
-  const userCollection = firestore.collection("users").doc(uid);
+  const userCollection = firestore.collection("displayName").doc(uid);
   const currentDisplayName = await userCollection.set({
     displayName: displayName,
   });
@@ -40,10 +45,13 @@ export const openAccountSharing = async function (uid) {
     })
     .then(async (value) => {
       const userCollection = firestore.collection("users").doc(uid);
-      await userCollection.update({
-        sharingLinkFlag: true,
-        sharingLink: value.id,
-      });
+      await userCollection.set(
+        {
+          sharingLinkFlag: true,
+          sharingLink: value.id,
+        },
+        { merge: true }
+      );
       thisCurrentUser.sharingLinkFlag = true;
       thisCurrentUser.sharingLink = value.id;
     });
@@ -53,10 +61,13 @@ export const closeAccountSharing = async function (uid, link) {
   const sharingLink = firestore.collection("sharingLink").doc(link);
   await sharingLink.delete().then(async (value) => {
     const userCollection = firestore.collection("users").doc(uid);
-    await userCollection.update({
-      sharingLinkFlag: false,
-      sharingLink: false,
-    });
+    await userCollection.set(
+      {
+        sharingLinkFlag: false,
+        sharingLink: false,
+      },
+      { merge: true }
+    );
     thisCurrentUser.sharingLinkFlag = false;
     thisCurrentUser.sharingLink = false;
   });

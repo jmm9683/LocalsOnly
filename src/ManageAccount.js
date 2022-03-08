@@ -13,6 +13,7 @@ import {
   deleteUserStash,
   getFollowers,
   getFollowing,
+  getDisplayName,
 } from "./Users.js";
 
 function classNames(...classes) {
@@ -72,7 +73,7 @@ function ManageAccount() {
           const followers = value.data();
           Object.keys(followers).forEach(async function (uid) {
             if (followers[uid] == true) {
-              await currentUser(uid).then(async (value) => {
+              await getDisplayName(uid).then(async (value) => {
                 thisFollowerList.push({
                   uid: uid,
                   displayName: value.get("displayName"),
@@ -90,7 +91,7 @@ function ManageAccount() {
           const following = value.data();
           Object.keys(following).forEach(async function (uid) {
             if (following[uid] == true) {
-              await currentUser(uid).then(async (value) => {
+              await getDisplayName(uid).then(async (value) => {
                 thisFollowingList.push({
                   uid: uid,
                   displayName: value.get("displayName"),
@@ -140,7 +141,7 @@ function ManageAccount() {
     setCopyButtonText("Copy");
   }
   function updateSharingInfo() {
-    if (userInfo.sharingLink != false) {
+    if (userInfo.sharingLink != undefined && userInfo.sharingLink != false) {
       setSharingLink(
         window.location.hostname + "/?followingLink=" + userInfo.sharingLink
       );

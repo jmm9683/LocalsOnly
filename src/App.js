@@ -12,6 +12,7 @@ import {
   currentUser,
   setDisplayName,
   followUser,
+  getDisplayName,
   getFollowers,
   getFollowing,
   setCurrentUser,
@@ -23,11 +24,14 @@ function App() {
   let [searchParams, setSeachParams] = useSearchParams();
 
   if (user) {
-    const userData = currentUser(user.uid);
-    userData.then((value) => {
+    const displayName = getDisplayName(user.uid);
+    displayName.then((value) => {
       if (value.get("displayName") == undefined) {
         setDisplayName(user.uid, user.displayName);
       }
+    });
+    const userData = currentUser(user.uid);
+    userData.then((value) => {
       if (value.get("sharingLink") != undefined) {
         setCurrentUser(
           user.uid,
