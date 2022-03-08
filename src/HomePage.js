@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
 function HomePage() {
@@ -9,9 +11,11 @@ function HomePage() {
         to="/stashes"
       ></Link>
       <Link
-        className="location bg-red-500 hover:bg-red-700 px-5 py-2 bg-[url(img/mark.svg)] rounded-full w-20 h-8"
+        className="location bg-red-500 hover:bg-red-700 px-5 py-1 rounded-full w-20 h-8 text-center"
         to="/add-stash"
-      ></Link>
+      >
+        <FontAwesomeIcon icon={faMapLocationDot} className="fa-lg" />
+      </Link>
     </div>
   );
 }

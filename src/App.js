@@ -4,20 +4,23 @@ import React from "react";
 import firebase from "firebase/compat/app";
 import { firebaseAuth } from "./Firebase.js";
 
-import { Outlet } from "react-router-dom";
+import { Outlet, useSearchParams, useNavigate } from "react-router-dom";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import {
   currentUser,
   setDisplayName,
+  followUser,
   getFollowers,
   getFollowing,
   setCurrentUser,
 } from "./Users.js";
 
 function App() {
+  const navigate = useNavigate();
   const [user] = useAuthState(firebaseAuth);
+  let [searchParams, setSeachParams] = useSearchParams();
 
   if (user) {
     const userData = currentUser(user.uid);
@@ -36,6 +39,11 @@ function App() {
         setCurrentUser(user.uid, user.displayName, false, false);
       }
     });
+    if (searchParams.get("followingLink")) {
+      followUser(user.uid, searchParams.get("followingLink")).then(() => {
+        navigate("/");
+      });
+    }
   }
 
   return (

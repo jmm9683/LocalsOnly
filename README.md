@@ -16,17 +16,19 @@
 
 - Styling with Tailwind
 
-#### MVP 0.3 Alpha Socials
+#### MVP 0.3 Alpha Release
 
-- Menu for logout, display name, following, followers, stashes
-  - change display name
-  - following to edit list
-  - followers to edit list
-  - stashes to edit list
-- Shareable link for adding friends
-  - User firebase dynamic links to automatic follow upon account creation or link open
-- Query your stashes and friends
-- Add a display name to stash list
+- Sharing Link
+- Query all following stashes
+- Alert component
+  - Succesful follow
+  - Unsuccesful follow
+  - Require location enabled
+  - Succesful posting
+  - Unsuccesful posting
+- Navigation dropdown to logout and account management
+- Landing Page with Title and description, and log in
+- Account permissions
 
   # Getting Started with Create React App
 

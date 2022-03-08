@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase/compat/app";
 import { firebaseAuth, firestore } from "./Firebase.js";
-
+import { useNavigate } from "react-router-dom";
 let thisCurrentUser = {};
 
 export const currentUser = async function (uid) {
@@ -87,4 +87,33 @@ export const getFollowers = async function (uid) {
 export const getFollowing = async function (uid) {
   const followingCollection = firestore.collection("following").doc(uid);
   return await followingCollection.get();
+};
+
+export const followUser = async function (uid, link) {
+  const sharingLink = firestore.collection("sharingLink").doc(link);
+  await sharingLink
+    .get()
+    .then(async (value) => {
+      const followingID = value.get("uid");
+      if (followingID == undefined) {
+        throw "Following Link Disabled";
+      }
+      const following = firestore.collection("following").doc(uid);
+      await following.set(
+        {
+          [followingID]: true,
+        },
+        { merge: true }
+      );
+      const follower = firestore.collection("followers").doc(followingID);
+      await follower.set(
+        {
+          [uid]: true,
+        },
+        { merge: true }
+      );
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 };

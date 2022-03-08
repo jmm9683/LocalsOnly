@@ -5,8 +5,8 @@ import { Tab, Switch } from "@headlessui/react";
 import { firebaseAuth, firestore } from "./Firebase.js";
 
 import {
+  currentUser,
   getCurrentUser,
-  setDisplayName,
   openAccountSharing,
   closeAccountSharing,
   getUserStashes,
@@ -22,6 +22,9 @@ function classNames(...classes) {
 function ManageAccount() {
   const { uid } = firebaseAuth.currentUser;
   const [userInfo, setUserInfo] = useState({});
+  const [stashList, setStashList] = useState([]);
+  const [followerList, setFollowerList] = useState([]);
+  const [followingList, setFollowingList] = useState([]);
   const [sharingOpen, setSharingOpen] = useState(false);
   const [sharingLink, setSharingLink] = useState("Closed Account");
   const [copyButtonText, setCopyButtonText] = useState("Copy");
@@ -33,10 +36,11 @@ function ManageAccount() {
   useEffect(() => {
     updateSharingInfo();
   }, [userInfo]);
+
   useEffect(() => {
     if (uid) {
       const stashData = getUserStashes(uid);
-      stashData.then((value) => {
+      stashData.then(async (value) => {
         if (value.docs != undefined) {
           let myStashes = [];
           for (const doc of value.docs) {
@@ -58,49 +62,46 @@ function ManageAccount() {
               id: doc.id,
             });
           }
-          setData({ ...data, "My Stashes": myStashes });
+          setStashList(myStashes);
         }
       });
       const followerData = getFollowers(uid);
-      followerData.then((value) => {
-        if (value.docs != undefined) {
-          let myFollowers = [];
-          for (const doc of value.docs) {
-            const user = doc.get("uid");
-            const displayName = doc.get("displayName");
-            if (user && displayName) {
-              myFollowers.push({
-                uid: uid,
-                displayName: displayName,
-                disabled: false,
-                id: doc.id,
+      followerData.then(async (value) => {
+        let thisFollowerList = [];
+        if (value.data()) {
+          const followers = value.data();
+          Object.keys(followers).forEach(async function (uid) {
+            if (followers[uid] == true) {
+              await currentUser(uid).then(async (value) => {
+                thisFollowerList.push({
+                  uid: uid,
+                  displayName: value.get("displayName"),
+                });
+                setFollowerList(thisFollowerList);
               });
             }
-          }
-          setData({ ...data, Tourists: myFollowers });
+          });
         }
       });
       const followingData = getFollowing(uid);
-      followingData.then((value) => {
-        if (value.docs != undefined) {
-          let myFollowing = [];
-          for (const doc of value.docs) {
-            const user = doc.get("uid");
-            const displayName = doc.get("displayName");
-            if (user && displayName) {
-              myFollowing.push({
-                uid: uid,
-                displayName: displayName,
-                disabled: false,
-                id: doc.id,
+      followingData.then(async (value) => {
+        let thisFollowingList = [];
+        if (value.data()) {
+          const following = value.data();
+          Object.keys(following).forEach(async function (uid) {
+            if (following[uid] == true) {
+              await currentUser(uid).then(async (value) => {
+                thisFollowingList.push({
+                  uid: uid,
+                  displayName: value.get("displayName"),
+                });
+                setFollowingList(thisFollowingList);
               });
             }
-          }
-          setData({ ...data, Locals: myFollowing });
+          });
         }
-
-        setUserInfo(getCurrentUser());
       });
+      setUserInfo(getCurrentUser());
     }
   }, []);
   function deleteStash(id) {
@@ -140,7 +141,9 @@ function ManageAccount() {
   }
   function updateSharingInfo() {
     if (userInfo.sharingLink != false) {
-      setSharingLink(window.location.href + "/" + userInfo.sharingLink);
+      setSharingLink(
+        window.location.hostname + "/?followingLink=" + userInfo.sharingLink
+      );
       setSharingOpen(userInfo.sharingLinkFlag);
     } else {
       setSharingLink("Closed Account");
@@ -219,7 +222,7 @@ function ManageAccount() {
             >
               <ul>
                 {key == "My Stashes" &&
-                  data[key].map(function (item) {
+                  stashList.map(function (item) {
                     return (
                       <li className="flex flex-row mb-2 bg-slate-800  bg-opacity-50 rounded-lg shadow w-full">
                         <div className="select-none flex flex-1 items-center p-4 ">
@@ -280,8 +283,8 @@ function ManageAccount() {
                       </li>
                     );
                   })}
-                {(key == "Tourists" || key == "Locals") &&
-                  data[key].map(function (item) {
+                {key == "Tourists" &&
+                  followerList.map(function (item) {
                     return (
                       <li className="flex flex-row mb-2 bg-slate-800  bg-opacity-50 rounded-lg shadow">
                         <div className="select-none cursor-pointer flex flex-1 items-center p-4">
@@ -314,15 +317,54 @@ function ManageAccount() {
                       </li>
                     );
                   })}
-                {data[key].length == 0 && (
+                {key == "Locals" &&
+                  followingList.map(function (item) {
+                    return (
+                      <li className="flex flex-row mb-2 bg-slate-800  bg-opacity-50 rounded-lg shadow">
+                        <div className="select-none cursor-pointer flex flex-1 items-center p-4">
+                          <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                            <div className="mx-auto h-10 w-10">
+                              <svg
+                                className="fill-green-700"
+                                viewBox="0 0 25 25"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M12 3c2.131 0 4 1.73 4 3.702 0 2.05-1.714 4.941-4 8.561-2.286-3.62-4-6.511-4-8.561 0-1.972 1.869-3.702 4-3.702zm0-2c-3.148 0-6 2.553-6 5.702 0 3.148 2.602 6.907 6 12.298 3.398-5.391 6-9.15 6-12.298 0-3.149-2.851-5.702-6-5.702zm0 8c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zm12 14h-24l4-8h3.135c.385.641.798 1.309 1.232 2h-3.131l-2 4h17.527l-2-4h-3.131c.435-.691.848-1.359 1.232-2h3.136l4 8z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                          <div className="flex-1 pl-1 mr-16">
+                            <div className="font-medium text-white">
+                              {item.displayName}
+                            </div>
+                          </div>
+                          <div className="text-gray-200 text-xs">
+                            <button className="location bg-red-800 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white">
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })}
+                {key == "My Stashes" && stashList.length == 0 && (
                   <div className="text-white pt-32 text-center">
-                    {key == "My Stashes" && <div>You have no stashes.</div>}
-                    {key == "Tourists" && (
-                      <div>No tourists found following your stashes.</div>
-                    )}
-                    {key == "Locals" && (
-                      <div>You are not following any locals.</div>
-                    )}
+                    <div>You have no stashes.</div>
+                  </div>
+                )}
+
+                {key == "Tourists" && followerList.length == 0 && (
+                  <div className="text-white pt-32 text-center">
+                    <div>No tourists found following your stashes.</div>
+                  </div>
+                )}
+                {key == "Locals" && followingList.length == 0 && (
+                  <div className="text-white pt-32 text-center">
+                    <div>You are not following any locals.</div>
                   </div>
                 )}
               </ul>
