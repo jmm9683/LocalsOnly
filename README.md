@@ -18,8 +18,8 @@
 
 #### MVP 0.3 Alpha Release
 
-- Sharing Link
-- Query all following stashes
+- Sharing Link (completed)
+- Query all following stashes (completed)
 - Alert component
   - Succesful follow
   - Unsuccesful follow
