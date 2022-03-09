@@ -89,7 +89,18 @@ export const deleteUserStash = async function (uid, id) {
     .doc(`${id}`);
   return await userStashes.delete();
 };
-
+export const deleteUserFollowing = async function (owner, following) {
+  const followingData = firestore.collection("following").doc(owner);
+  return await followingData.update({
+    [following]: firebase.firestore.FieldValue.delete(),
+  });
+};
+export const deleteUserFollower = async function (owner, follower) {
+  const followerData = firestore.collection("followers").doc(owner);
+  return await followerData.update({
+    [follower]: firebase.firestore.FieldValue.delete(),
+  });
+};
 export const getFollowers = async function (uid) {
   const followersCollection = firestore.collection("followers").doc(uid);
   return await followersCollection.get();

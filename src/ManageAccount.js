@@ -1,6 +1,11 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { Tab, Switch } from "@headlessui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUserAstronaut,
+  faUserNinja,
+} from "@fortawesome/free-solid-svg-icons";
 
 import { firebaseAuth, firestore } from "./Firebase.js";
 
@@ -14,6 +19,8 @@ import {
   getFollowers,
   getFollowing,
   getDisplayName,
+  deleteUserFollowing,
+  deleteUserFollower,
 } from "./Users.js";
 
 function classNames(...classes) {
@@ -77,6 +84,7 @@ function ManageAccount() {
                 thisFollowerList.push({
                   uid: uid,
                   displayName: value.get("displayName"),
+                  disabled: false,
                 });
                 setFollowerList(thisFollowerList);
               });
@@ -95,26 +103,51 @@ function ManageAccount() {
                 thisFollowingList.push({
                   uid: uid,
                   displayName: value.get("displayName"),
+                  disabled: false,
                 });
                 setFollowingList(thisFollowingList);
               });
             }
           });
         }
+
+        setUserInfo(getCurrentUser());
       });
-      setUserInfo(getCurrentUser());
     }
   }, []);
   function deleteStash(id) {
     const stashData = deleteUserStash(uid, id);
     stashData.then(() => {
-      let updatedStashes = data["My Stashes"].map((stash) =>
+      let updatedStashes = stashList.map((stash) =>
         stash.id === id
           ? { ...stash, disabled: true, googleMapsLink: "" }
           : stash
       );
-      console.log(updatedStashes);
-      setData({ ...data, "My Stashes": updatedStashes });
+      setStashList(updatedStashes);
+    });
+  }
+  function deleteFollower(id) {
+    const followerData = deleteUserFollower(uid, id);
+    followerData.then(() => {
+      const followingData = deleteUserFollowing(id, uid);
+      followingData.then(() => {
+        let updatedFollower = followerList.map((tourist) =>
+          tourist.uid === id ? { ...tourist, disabled: true } : tourist
+        );
+        setFollowerList(updatedFollower);
+      });
+    });
+  }
+  function deleteFollowing(id) {
+    const followingData = deleteUserFollowing(uid, id);
+    followingData.then(() => {
+      const followerData = deleteUserFollower(id, uid);
+      followerData.then(() => {
+        let updatedFollowing = followingList.map((local) =>
+          local.uid === id ? { ...local, disabled: true } : local
+        );
+        setFollowingList(updatedFollowing);
+      });
     });
   }
 
@@ -292,15 +325,11 @@ function ManageAccount() {
                           <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
                             <div className="mx-auto h-10 w-10">
                               <svg
-                                className="fill-green-700"
-                                viewBox="0 0 25 25"
                                 xmlns="http://www.w3.org/2000/svg"
+                                className="fill-green-700"
+                                viewBox="0 0 512 512"
                               >
-                                <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M12 3c2.131 0 4 1.73 4 3.702 0 2.05-1.714 4.941-4 8.561-2.286-3.62-4-6.511-4-8.561 0-1.972 1.869-3.702 4-3.702zm0-2c-3.148 0-6 2.553-6 5.702 0 3.148 2.602 6.907 6 12.298 3.398-5.391 6-9.15 6-12.298 0-3.149-2.851-5.702-6-5.702zm0 8c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zm12 14h-24l4-8h3.135c.385.641.798 1.309 1.232 2h-3.131l-2 4h17.527l-2-4h-3.131c.435-.691.848-1.359 1.232-2h3.136l4 8z"
-                                />
+                                <path d="M240 96c26.5 0 48-21.5 48-48S266.5 0 240 0C213.5 0 192 21.5 192 48S213.5 96 240 96zM80.01 287.1c7.31 0 13.97-4.762 15.87-11.86L137 117c.3468-1.291 .5125-2.588 .5125-3.866c0-7.011-4.986-13.44-12.39-15.13C118.4 96.38 111.7 95.6 105.1 95.6c-36.65 0-70 23.84-79.32 59.53L.5119 253.3C.1636 254.6-.0025 255.9-.0025 257.2c0 7.003 4.961 13.42 12.36 15.11L76.01 287.5C77.35 287.8 78.69 287.1 80.01 287.1zM368 160h-15.1c-8.875 0-15.1 7.125-15.1 16V192h-34.75l-46.75-46.75C243.4 134.1 228.6 128 212.9 128C185.9 128 162.5 146.3 155.9 172.5L129 280.3C128.4 282.8 128 285.5 128 288.1c0 8.325 3.265 16.44 9.354 22.53l86.62 86.63V480c0 17.62 14.37 32 31.1 32s32-14.38 32-32v-82.75c0-17.12-6.625-33.13-18.75-45.25l-46.87-46.88c.25-.5 .5-.875 .625-1.375l19.1-79.5l22.37 22.38C271.4 252.6 279.5 256 288 256h47.1v240c0 8.875 7.125 16 15.1 16h15.1C376.9 512 384 504.9 384 496v-320C384 167.1 376.9 160 368 160zM81.01 472.3c-.672 2.63-.993 5.267-.993 7.86c0 14.29 9.749 27.29 24.24 30.89C106.9 511.8 109.5 512 112 512c14.37 0 27.37-9.75 30.1-24.25l25.25-101l-52.75-52.75L81.01 472.3z" />
                               </svg>
                             </div>
                           </div>
@@ -310,9 +339,24 @@ function ManageAccount() {
                             </div>
                           </div>
                           <div className="text-gray-200 text-xs">
-                            <button className="location bg-red-800 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white">
-                              Remove
-                            </button>
+                            {!item.disabled && (
+                              <button
+                                className="location bg-red-800 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
+                                onClick={() => {
+                                  deleteFollower(item.uid);
+                                }}
+                              >
+                                Remove
+                              </button>
+                            )}
+                            {item.disabled && (
+                              <button
+                                disabled={true}
+                                className="location bg-slate-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
+                              >
+                                Removed
+                              </button>
+                            )}
                           </div>
                         </div>
                       </li>
@@ -326,15 +370,11 @@ function ManageAccount() {
                           <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
                             <div className="mx-auto h-10 w-10">
                               <svg
-                                className="fill-green-700"
-                                viewBox="0 0 25 25"
                                 xmlns="http://www.w3.org/2000/svg"
+                                className="fill-green-700"
+                                viewBox="0 0 512 512"
                               >
-                                <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M12 3c2.131 0 4 1.73 4 3.702 0 2.05-1.714 4.941-4 8.561-2.286-3.62-4-6.511-4-8.561 0-1.972 1.869-3.702 4-3.702zm0-2c-3.148 0-6 2.553-6 5.702 0 3.148 2.602 6.907 6 12.298 3.398-5.391 6-9.15 6-12.298 0-3.149-2.851-5.702-6-5.702zm0 8c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2zm12 14h-24l4-8h3.135c.385.641.798 1.309 1.232 2h-3.131l-2 4h17.527l-2-4h-3.131c.435-.691.848-1.359 1.232-2h3.136l4 8z"
-                                />
+                                <path d="M352 128C352 198.7 294.7 256 224 256C153.3 256 96 198.7 96 128C96 57.31 153.3 0 224 0C294.7 0 352 57.31 352 128zM209.1 359.2L176 304H272L238.9 359.2L272.2 483.1L311.7 321.9C388.9 333.9 448 400.7 448 481.3C448 498.2 434.2 512 417.3 512H30.72C13.75 512 0 498.2 0 481.3C0 400.7 59.09 333.9 136.3 321.9L175.8 483.1L209.1 359.2z" />
                               </svg>
                             </div>
                           </div>
@@ -344,9 +384,24 @@ function ManageAccount() {
                             </div>
                           </div>
                           <div className="text-gray-200 text-xs">
-                            <button className="location bg-red-800 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white">
-                              Remove
-                            </button>
+                            {!item.disabled && (
+                              <button
+                                className="location bg-red-800 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
+                                onClick={() => {
+                                  deleteFollowing(item.uid);
+                                }}
+                              >
+                                Remove
+                              </button>
+                            )}
+                            {item.disabled && (
+                              <button
+                                disabled={true}
+                                className="location bg-slate-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
+                              >
+                                Removed
+                              </button>
+                            )}
                           </div>
                         </div>
                       </li>
