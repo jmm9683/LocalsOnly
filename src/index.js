@@ -17,6 +17,7 @@ render(
         <Route path="stashes" element={<StashList search={true} />} />
         <Route path="add-stash" element={<StashForm />} />
         <Route path="account" element={<ManageAccount />} />
+        <Route path="*" element={<HomePage />} />
       </Route>
     </Routes>
   </BrowserRouter>,
