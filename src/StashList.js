@@ -5,9 +5,23 @@ import { firebaseAuth, firestore } from "./Firebase.js";
 
 import { getFollowing, getDisplayName } from "./Users.js";
 
+import Alert from "./Alert.js";
+
 const geofire = require("geofire-common");
 
 function StashList({ search }) {
+  const [alertLocationFlag, setAlertLocationFlag] = useState(false);
+
+  const alert = (flag) => {
+    setAlertLocationFlag(!flag);
+    setTimeout(
+      function () {
+        setAlertLocationFlag(false);
+      }.bind(this),
+      5000
+    );
+  };
+
   const [position, setPosition] = useState("");
   const [positionHash, setPositionHash] = useState("");
 
@@ -41,6 +55,7 @@ function StashList({ search }) {
       },
       function (error) {
         console.error("Error Code = " + error.code + " - " + error.message);
+        alert(false);
         return error;
       }
     );
@@ -128,7 +143,15 @@ function StashList({ search }) {
   };
 
   return (
-    <div className=" w-full">
+    <div className="w-full max-w-xs sm:w-screen sm:max-w-md">
+      <div className="absolute top-1 w-11/12 left-1/2 transform -translate-x-1/2 max-w-md">
+        {alertLocationFlag && (
+          <Alert
+            alertLocationFlag={alertLocationFlag}
+            alertFollowingFLag={false}
+          ></Alert>
+        )}
+      </div>
       <div id="stashList" className="stashForm-container">
         <div className="no-scrollbar flex flex-col container mt-10 mx-auto h-96 overflow-auto">
           {query ? (
@@ -171,7 +194,7 @@ function StashList({ search }) {
                               {stash.doc.get("description")}
                             </div>
                           </div>
-                          <div className="text-gray-200 text-xs">
+                          <div className="text-gray-200 text-xs mr-1">
                             <div>
                               {stash.doc.get("category")} - {stash.dist} miles
                             </div>

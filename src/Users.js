@@ -113,29 +113,27 @@ export const getFollowing = async function (uid) {
 
 export const followUser = async function (uid, link) {
   const sharingLink = firestore.collection("sharingLink").doc(link);
-  await sharingLink
-    .get()
-    .then(async (value) => {
-      const followingID = value.get("uid");
-      if (followingID == undefined) {
-        throw "Following Link Disabled";
-      }
-      const following = firestore.collection("following").doc(uid);
-      await following.set(
-        {
-          [followingID]: true,
-        },
-        { merge: true }
-      );
-      const follower = firestore.collection("followers").doc(followingID);
-      await follower.set(
-        {
-          [uid]: true,
-        },
-        { merge: true }
-      );
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  await sharingLink.get().then(async (value) => {
+    const followingID = value.get("uid");
+    if (followingID == undefined) {
+      throw "Following Link Disabled";
+    }
+    if (followingID == uid) {
+      throw "Following Yourself";
+    }
+    const following = firestore.collection("following").doc(uid);
+    await following.set(
+      {
+        [followingID]: true,
+      },
+      { merge: true }
+    );
+    const follower = firestore.collection("followers").doc(followingID);
+    await follower.set(
+      {
+        [uid]: true,
+      },
+      { merge: true }
+    );
+  });
 };

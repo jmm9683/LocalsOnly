@@ -20,14 +20,14 @@
 
 - Sharing Link (completed)
 - Query all following stashes (completed)
-- Alert component
-  - Succesful follow
-  - Unsuccesful follow
-  - Require location enabled
-  - Succesful posting
-  - Unsuccesful posting
-- Navigation dropdown to logout and account management
-- Landing Page with Title and description, and log in
+- Alert component (completed)
+  - Succesful follow (complete)
+  - Unsuccesful follow (complete)
+  - Require location enabled (complete)
+  - Succesful posting (complete)
+  - Unsuccesful posting (complete)
+- Navigation dropdown to logout and account management (complete)
+- Landing Page with Title and description, and log in (complete)
 - Account permissions
 
   # Getting Started with Create React App

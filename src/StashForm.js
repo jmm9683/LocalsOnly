@@ -4,9 +4,23 @@ import { Link, useNavigate } from "react-router-dom";
 import firebase from "firebase/compat/app";
 import { firebaseAuth, firestore } from "./Firebase.js";
 
+import Alert from "./Alert.js";
+
 const geofire = require("geofire-common");
 
 function StashForm() {
+  const [alertLocationFlag, setAlertLocationFlag] = useState(false);
+
+  const alert = (flag) => {
+    setAlertLocationFlag(!flag);
+    setTimeout(
+      function () {
+        setAlertLocationFlag(false);
+      }.bind(this),
+      5000
+    );
+  };
+
   const navigate = useNavigate();
   const [position, setPosition] = useState("");
   const [positionHash, setPositionHash] = useState("");
@@ -21,7 +35,6 @@ function StashForm() {
       savePosition();
     }
   }, [posting]);
-
   function getCurrentPosition() {
     navigator.geolocation.getCurrentPosition(
       function (position) {
@@ -36,6 +49,7 @@ function StashForm() {
       },
       function (error) {
         console.error("Error Code = " + error.code + " - " + error.message);
+        alert(false);
         return error;
       }
     );
@@ -69,6 +83,14 @@ function StashForm() {
 
   return (
     <div className="mx-auto w-full">
+      <div className="absolute top-1 w-11/12 left-1/2 transform -translate-x-1/2 max-w-md">
+        {alertLocationFlag && (
+          <Alert
+            alertLocationFlag={alertLocationFlag}
+            alertFollowingFLag={false}
+          ></Alert>
+        )}
+      </div>
       <div
         id="stashForm"
         className="stashForm-container bg-slate-800 bg-opacity-90 py-8 px-6 shadow rounded-lg sm:px-10"
@@ -90,6 +112,8 @@ function StashForm() {
                 value={title}
                 className="bg-slate-700 text-white"
                 onChange={(e) => setTitle(e.target.value)}
+                maxLength="15"
+                required
               />
             </div>
           </div>
@@ -139,6 +163,7 @@ function StashForm() {
                 className="bg-slate-700 text-white"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                maxLength="20"
               />
             </div>
           </div>
