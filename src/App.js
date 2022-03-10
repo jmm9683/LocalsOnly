@@ -127,8 +127,8 @@ function SignIn() {
         Stash and share your favorite local spots.
       </p>
       <p className="font-overpass text-slate-300 text-xl sm:text-xl">
-        Your friends will discover your secret spots only when they are within
-        range.
+        Your friends will discover your secret spots only when they are in the
+        area.
       </p>
     </div>
   );
