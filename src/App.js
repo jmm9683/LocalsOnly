@@ -155,11 +155,15 @@ function Account() {
   }
 }
 function SignOut() {
+  const navigate = useNavigate();
   if (firebaseAuth.currentUser) {
     return (
       <button
         className="sign-out bg-red-500 hover:bg-red-700 rounded-md h-6 w-6"
-        onClick={() => firebaseAuth.signOut()}
+        onClick={() => {
+          firebaseAuth.signOut();
+          navigate("/");
+        }}
       >
         <FontAwesomeIcon icon={faArrowRightFromBracket} />
       </button>
