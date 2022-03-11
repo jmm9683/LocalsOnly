@@ -117,20 +117,26 @@ function SignIn() {
   return (
     <div className="grid gap-4 justify-items-center text-center w-full">
       <h1 className="font-overpass text-zinc-300 text-7xl sm:text-8xl font-semibold">
-        !LOCALS!
+        LOCALS
       </h1>
-      <h1 className="font-overpass text-zinc-300 text-6xl sm:text-7xl font-semibold ">
-        !ONLY!
+      <h1 className="font-overpass text-zinc-300 text-6xl sm:text-7xl font-semibold">
+        ONLY
       </h1>
-      <button
-        className="font-overpass sign-in bg-zinc-500 hover:bg-zinc-600 px-5 py-2 text-lg leading-4 rounded-full font-semibold text-white"
-        onClick={signInWithGoogle}
-      >
-        Enter
-      </button>
+      <div class="grid grid-cols-3">
+        <div className="bg-[url(img/landingAlert.svg)] bg-center bg-no-repeat w-full h-full"></div>
+        <button
+          className="font-overpass sign-in bg-zinc-500 hover:bg-zinc-600 px-5 py-2 text-lg leading-4 rounded-full font-semibold text-white"
+          onClick={signInWithGoogle}
+        >
+          Enter
+        </button>
+        <div className="bg-[url(img/landingAlert.svg)] bg-center bg-no-repeat w-full h-full"></div>
+      </div>
+
       <p className="font-overpass text-zinc-300 text-xl sm:text-xl">
         Stash and share your favorite local spots.
       </p>
+
       <p className="font-overpass text-zinc-300 text-xl sm:text-xl">
         Your friends will discover your secret spots only when they are in the
         area.
