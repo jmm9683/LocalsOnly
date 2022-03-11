@@ -25,7 +25,7 @@ function StashForm() {
   const [position, setPosition] = useState("");
   const [positionHash, setPositionHash] = useState("");
 
-  const [category, setCategory] = useState("any");
+  const [visibility, setVisibility] = useState(16.0934);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -66,9 +66,8 @@ function StashForm() {
       longitude: position.coords.longitude,
       positionHash: positionHash,
       title: title,
-      category: category,
+      visibility: parseFloat(visibility, 10),
       description: description,
-      category_positionHash: category + "_" + positionHash,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
     });
@@ -96,7 +95,7 @@ function StashForm() {
         className="stashForm-container bg-slate-800 bg-opacity-90 py-8 px-6 shadow rounded-lg sm:px-10"
       >
         <form
-          className="mb-0 space-y-6"
+          className="mb-0 space-y-3"
           onSubmit={postStash}
           onChange={() => {}}
         >
@@ -112,37 +111,39 @@ function StashForm() {
                 value={title}
                 className="bg-slate-700 text-white"
                 onChange={(e) => setTitle(e.target.value)}
-                maxLength="15"
                 required
               />
             </div>
           </div>
           <div>
             <label
-              for="category-select"
+              for="visibility-select"
               className="block text-sm font-medium text-white"
             >
-              Stash Category
+              Visibility
             </label>
             <div className="mt-1">
               <select
-                name="category-select"
-                id="category-select"
+                name="visibility-select"
+                id="visibility-select"
                 className="bg-slate-700 text-white"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                value={visibility}
+                onChange={(e) => setVisibility(e.target.value)}
               >
-                <option className="text-white" value="any">
-                  Anything
+                <option className="text-white" value="0.0762">
+                  Only Here (0.05 mi)
                 </option>
-                <option className="text-white" value="drink">
-                  Drink
+                <option className="text-white" value="0.402336">
+                  Close (0.25 mi)
                 </option>
-                <option className="text-white" value="food">
-                  Food
+                <option className="text-white" value="3.21869">
+                  Medium (2 mi)
                 </option>
-                <option className="text-white" value="outdoors">
-                  Outdoors
+                <option className="text-white" value="16.0934">
+                  Far (10 mi)
+                </option>
+                <option className="text-white" value="80.4672">
+                  Max (50 mi)
                 </option>
               </select>
             </div>
@@ -163,7 +164,6 @@ function StashForm() {
                 className="bg-slate-700 text-white"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                maxLength="20"
               />
             </div>
           </div>

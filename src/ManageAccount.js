@@ -253,12 +253,12 @@ function ManageAccount() {
                   stashList.map(function (item) {
                     return (
                       <li className="flex flex-row mb-2 bg-slate-800  bg-opacity-50 rounded-lg shadow w-full">
-                        <div className="select-none flex flex-1 items-center p-4 ">
+                        <div className="select-none flex flex-1 items-center p-4 w-full">
                           <a
                             className={
                               item.disabled
-                                ? "flex flex-1 cursor-default pointer-events-none"
-                                : "flex flex-1 select-none cursor-pointer"
+                                ? "flex flex-1 cursor-default pointer-events-none w-5/6"
+                                : "flex flex-1 select-none cursor-pointer w-5/6"
                             }
                             href={item.googleMapsLink}
                             target={item.disabled ? "" : "_blank"}
@@ -274,7 +274,7 @@ function ManageAccount() {
                                 </svg>
                               </div>
                             </div>
-                            <div className="flex-1 pl-1 mr-16">
+                            <div className="flex-1 pl-1 w-1/3">
                               <div className="font-medium text-white">
                                 {item.title}
                               </div>
@@ -283,10 +283,10 @@ function ManageAccount() {
                               </div>
                             </div>
                           </a>
-                          <div className="text-gray-200 text-xs">
+                          <div className="text-gray-200 text-xs w-1/3 text-right">
                             {!item.disabled && (
                               <button
-                                className="location bg-red-800 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
+                                className="location bg-red-800 hover:bg-red-700 w-11/12 max-w-[100px] py-2 sm:py-1 text-xs sm:text-sm leading-3 rounded-full font-semibold text-white"
                                 onClick={() => {
                                   deleteStash(item.id);
                                 }}
@@ -297,7 +297,7 @@ function ManageAccount() {
                             {item.disabled && (
                               <button
                                 disabled={true}
-                                className="location bg-slate-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
+                                className="location bg-slate-700 w-11/12 max-w-[100px] py-2 sm:py-1 text-xs sm:text-sm leading-3 rounded-full font-semibold text-white"
                               >
                                 Removed
                               </button>
@@ -323,15 +323,15 @@ function ManageAccount() {
                               </svg>
                             </div>
                           </div>
-                          <div className="flex-1 pl-1 mr-16">
+                          <div className="flex-1 pl-1 w-1/3">
                             <div className="font-medium text-white">
                               {item.displayName}
                             </div>
                           </div>
-                          <div className="text-gray-200 text-xs">
+                          <div className="text-gray-200 text-xs w-1/3 text-right">
                             {!item.disabled && (
                               <button
-                                className="location bg-red-800 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
+                                className="location bg-red-800 hover:bg-red-700 w-11/12 max-w-[100px] py-2 sm:py-1 text-xs sm:text-sm leading-3 rounded-full font-semibold text-white"
                                 onClick={() => {
                                   deleteFollower(item.uid);
                                 }}
@@ -342,7 +342,7 @@ function ManageAccount() {
                             {item.disabled && (
                               <button
                                 disabled={true}
-                                className="location bg-slate-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
+                                className="location bg-slate-700 w-11/12 max-w-[100px] py-2 sm:py-1 text-xs sm:text-sm leading-3 rounded-full font-semibold text-white"
                               >
                                 Removed
                               </button>
@@ -368,15 +368,15 @@ function ManageAccount() {
                               </svg>
                             </div>
                           </div>
-                          <div className="flex-1 pl-1 mr-16">
+                          <div className="flex-1 pl-1 w-1/3">
                             <div className="font-medium text-white">
                               {item.displayName}
                             </div>
                           </div>
-                          <div className="text-gray-200 text-xs">
+                          <div className="text-gray-200 text-xs w-1/3 text-right">
                             {!item.disabled && (
                               <button
-                                className="location bg-red-800 hover:bg-red-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
+                                className="location bg-red-800 hover:bg-red-700 w-11/12 max-w-[100px] py-2 sm:py-1 text-xs sm:text-sm leading-3 rounded-full font-semibold text-white"
                                 onClick={() => {
                                   deleteFollowing(item.uid);
                                 }}
@@ -387,7 +387,7 @@ function ManageAccount() {
                             {item.disabled && (
                               <button
                                 disabled={true}
-                                className="location bg-slate-700 px-5 py-2 text-sm leading-3 rounded-full font-semibold text-white"
+                                className="location bg-slate-700 w-11/12 max-w-[100px] py-2 sm:py-1 text-xs sm:text-sm leading-3 rounded-full font-semibold text-white"
                               >
                                 Removed
                               </button>

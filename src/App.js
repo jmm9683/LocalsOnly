@@ -82,10 +82,10 @@ function App() {
        py-6 flex flex-row relative overflow-hidden"
     >
       <div className="absolute inset-0 bg-[url(img/topograph.svg)] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
-      <div className="relative place-items-begin pl-3 md:pl-6">
+      <div className="relative text-right w-1/12">
         <Account />
       </div>
-      <div className="relative flex w-full items-center justify-center mt-9 md:mt-0">
+      <div className="relative flex items-center w-10/12 justify-center mt-9 md:mt-0">
         <div className="absolute top-1 w-11/12 left-1/2 transform -translate-x-1/2 max-w-md">
           {(alertFollowingFailFlag || alertFollowingSuccessFlag) && (
             <Alert
@@ -94,9 +94,11 @@ function App() {
             ></Alert>
           )}
         </div>
-        <div className="min-h-96">{user ? <Outlet /> : <SignIn />}</div>
+        <div className="min-h-96 w-full max-w-lg">
+          {user ? <Outlet /> : <SignIn />}
+        </div>
       </div>
-      <div className="relative place-items-begin pr-3 md:pr-6">
+      <div className="relative text-left w-1/12">
         <SignOut />
       </div>
       <div className="absolute bottom-1 right-1 text-[10px] text-zinc-600">
