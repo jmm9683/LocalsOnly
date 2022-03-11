@@ -210,7 +210,7 @@ function StashList({ search }) {
                       </li>
                     );
                   })}
-              {stashes.legnth == 0 && (
+              {stashes.length == 0 && (
                 <div className="text-white pt-32 text-center">
                   No Nearby Stashes
                 </div>
