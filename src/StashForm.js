@@ -81,7 +81,7 @@ function StashForm() {
   }
 
   return (
-    <div className="mx-auto w-full">
+    <div className="mx-auto w-full max-w-sm">
       <div className="absolute top-1 w-11/12 left-1/2 transform -translate-x-1/2 max-w-md">
         {alertLocationFlag && (
           <Alert
@@ -92,7 +92,7 @@ function StashForm() {
       </div>
       <div
         id="stashForm"
-        className="stashForm-container bg-slate-800 bg-opacity-90 py-8 px-6 shadow rounded-lg sm:px-10"
+        className="stashForm-container bg-slate-800 bg-opacity-90 py-8 px-6 shadow rounded-lg sm:px-10 "
       >
         <form
           className="mb-0 space-y-3"
