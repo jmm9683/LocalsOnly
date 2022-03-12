@@ -70,6 +70,8 @@ function StashList({ search }) {
       if (value.data()) {
         following = value.data();
         following = { ...following, [uid]: true };
+      } else {
+        following = { [uid]: true };
       }
     });
     let userPromises = [];
@@ -139,7 +141,6 @@ function StashList({ search }) {
           .then((matchingDocs) => {
             Object.keys(matchingDocs).forEach((doc) => {
               setStashes((stashes) => [...stashes, matchingDocs[doc]]);
-              console.log(stashes);
             });
             setQuery(false);
           });
@@ -182,8 +183,8 @@ function StashList({ search }) {
                             href={googleMapsLink}
                             target="_blank"
                           >
-                            <div className="flex flex-col justify-center items-center text-center w-10 h-10 mr-4">
-                              <div>
+                            <div className="flex flex-col justify-center items-center w-10 h-10 mr-4">
+                              <div className="mx-auto w-10 h-10">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   viewBox="0 0 512 512"
