@@ -72,18 +72,26 @@ function ManageAccount() {
         let thisFollowerList = [];
         if (value.data()) {
           const followers = value.data();
+          let userPromises = [];
           Object.keys(followers).forEach(async function (uid) {
             if (followers[uid] == true) {
-              await getDisplayName(uid).then(async (value) => {
-                thisFollowerList.push({
-                  uid: uid,
-                  displayName: value.get("displayName"),
-                  disabled: false,
-                });
-                setFollowerList(thisFollowerList);
-              });
+              userPromises.push(getDisplayName(uid));
             }
           });
+          Promise.all(userPromises)
+            .then((snapshot) => {
+              for (const snap of snapshot) {
+                let displayName = snap.get("displayName");
+                thisFollowerList.push({
+                  uid: snap.id,
+                  displayName: displayName,
+                  disabled: false,
+                });
+              }
+            })
+            .then(() => {
+              setFollowerList(thisFollowerList);
+            });
         }
       });
       const followingData = getFollowing(uid);
@@ -91,20 +99,27 @@ function ManageAccount() {
         let thisFollowingList = [];
         if (value.data()) {
           const following = value.data();
+          let userPromises = [];
           Object.keys(following).forEach(async function (uid) {
             if (following[uid] == true) {
-              await getDisplayName(uid).then(async (value) => {
-                thisFollowingList.push({
-                  uid: uid,
-                  displayName: value.get("displayName"),
-                  disabled: false,
-                });
-                setFollowingList(thisFollowingList);
-              });
+              userPromises.push(getDisplayName(uid));
             }
           });
+          Promise.all(userPromises)
+            .then((snapshot) => {
+              for (const snap of snapshot) {
+                let displayName = snap.get("displayName");
+                thisFollowingList.push({
+                  uid: snap.id,
+                  displayName: displayName,
+                  disabled: false,
+                });
+              }
+            })
+            .then(() => {
+              setFollowingList(thisFollowingList);
+            });
         }
-
         setUserInfo(getCurrentUser());
       });
     }
