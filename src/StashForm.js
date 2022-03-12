@@ -112,6 +112,7 @@ function StashForm() {
                 className="bg-slate-700 text-white"
                 onChange={(e) => setTitle(e.target.value)}
                 required
+                maxLength="50"
               />
             </div>
           </div>
@@ -163,6 +164,7 @@ function StashForm() {
                 cols="15"
                 className="bg-slate-700 text-white"
                 value={description}
+                maxLength="150"
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>

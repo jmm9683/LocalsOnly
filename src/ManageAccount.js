@@ -180,15 +180,19 @@ function ManageAccount() {
   }
   return (
     <div className="w-full">
-      <div className="flex items-center justify-center md:gap-4 mb-4 w-full">
-        <input
-          disabled={true}
-          type="text"
-          id="title"
-          name="title"
-          value={sharingLink}
-          className="bg-slate-700 text-white text-center"
-        />
+      <div className="flex items-center justify-center md:gap-4 mb-4 w-full h-full">
+        <label for="title" className="text-sm font-medium text-white my-auto">
+          Sharing Link
+          <input
+            disabled={true}
+            type="text"
+            id="title"
+            name="title"
+            value={sharingLink}
+            className="bg-slate-700 text-white text-center"
+          />
+        </label>
+
         <button
           disabled={!sharingOpen}
           className={`${
@@ -196,7 +200,7 @@ function ManageAccount() {
               ? "bg-slate-700 text-slate-500 w-40"
               : "bg-slate-800 hover:bg-slate-700 text-white w-40"
           }
-          px-5 py-2 text-sm leading-3 rounded-lg font-semibold `}
+          px-5 py-3 text-sm leading-3 rounded-lg font-semibold  mt-5 `}
           onClick={() => {
             copyShareLink();
           }}
@@ -210,7 +214,7 @@ function ManageAccount() {
             sharingToggle();
           }}
           className={`${sharingOpen ? "bg-green-500" : "bg-red-500"}
-          relative inline-flex flex-shrink-0 h-[26px] w-[50px] border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+          relative inline-flex flex-shrink-0 h-[26px] w-[50px] border-2 mt-5 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
         >
           <span className="sr-only">Use setting</span>
           <span
