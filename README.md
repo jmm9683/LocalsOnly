@@ -1,4 +1,4 @@
-# Locals Only
+# Locals Only (localsonly.zone)
 
 ## _A platform to share your secret spots and stashes with the ones you trust_
 
@@ -8,15 +8,16 @@
 - Grab current location
 - Save location with user inputted field
   - Location (uneditable)
-  - Category
+  - Category (removed)
   - Title
   - Description
+  - Visibility
 
 #### MVP 0.2 Styling (COMPLETED)
 
 - Styling with Tailwind
 
-#### MVP 0.3 Alpha Release
+#### MVP 0.3 Alpha Release (COMPLETED)
 
 - Sharing Link (completed)
 - Query all following stashes (completed)
@@ -28,11 +29,8 @@
   - Unsuccesful posting (complete)
 - Navigation dropdown to logout and account management (complete)
 - Landing Page with Title and description, and log in (complete)
-- Account permissions
-
-  # Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- Account permissions (complete)
+- PWA Compliant (complete)
 
 ## Available Scripts
 
